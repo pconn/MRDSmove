@@ -4,7 +4,7 @@ mrds.cds.jags <- function(){
       #detection model
       Det1[isp,iind] ~ dbern(P.obs1[isp,iind]*Z[isp,iind])
       P.obs1[isp,iind] <- (.0000001+exp(-(Dist1[isp,iind]-1)*(Dist1[isp,iind]-1)/(2*Sigma1[isp,iind]*Sigma1[isp,iind])))*0.99999  #include 0.99999 because numerical values = 1.0 can be problematic for dbern
-      Sigma1[isp,iind] <- exp(beta.det.0+beta.det.sp[isp]+beta.det.fly*Fly[isp,iind]+beta.det.group*Group[isp,iind])
+      Sigma1[isp,iind] <- exp(beta.det.0+beta.det.sp[isp]+beta.det.fly*Fly[isp,iind]+beta.det.group.abs*Group.min1[isp,iind])
       #distance model
       Dist1[isp,iind] ~ dcat(BinWidth)  
 
@@ -16,48 +16,48 @@ mrds.cds.jags <- function(){
       Z[isp,iind] ~ dbern(Psi[isp])
       
       #cluster/group model
-      Group[isp,iind] <- Group.min1[isp,iind] + 1
-      Group.min1[isp,iind] ~ dpois(exp(Mu.grp.ind[isp,iind]))
-      Mu.grp.ind[isp,iind] ~ dnorm(Mu.grp[isp],tau.grp.ind.exp[isp])
+      Group[isp,iind] <- Group.min1[isp,iind]+1
+      Group.min1[isp,iind] ~ dpois(exp(Mu.grp[isp]))
+      #Group.min1[isp,iind] ~ dpois(exp(Mu.grp.ind[isp,iind]))
+      Mu.grp.ind[isp,iind] ~ dnorm(Mu.grp[isp],tau.grp.ind)
       
     }
     #abundance model
-    #Psi[isp] ~ dbeta(0.01,1)  #Link (2013) scale prior approx
-    Psi[isp] ~ dbeta(1.0,1.0)
+    Psi[isp] ~ dbeta(0.01,1)  #Link (2013) scale prior approx
+    #Psi[isp] ~ dbeta(1.0,1.0)
     G[isp] <- sum(Z[isp,1:(M[isp])])
     N[isp] <- sum(ZG[isp,1:(M[isp])])
     
     #cluster/group size model
     Mu.grp[isp] ~ dnorm(mu.grp,tau.grp)
-    tau.grp.ind.exp[isp] <- exp(tau.grp.ind[isp])
-    tau.grp.ind[isp] ~ dnorm(tau.grp.mu,10000)   #dnorm(tau.grp.mu,0.1)
     #proportion flying model
     Fly.sp.expit[isp] <- 1/(1+exp(-Fly.sp[isp]))
     Fly.sp[isp] ~ dnorm(fly.mean,tau.fly)
     
-    beta.det.sp[isp]~ dnorm(0.0,10)
+    beta.det.sp[isp]~ dnorm(0.0,tau.sp.det)
     
   }
  
-  
   #More priors
   mu.grp ~ dnorm(0,0.01)
   tau.grp ~ dgamma(1.0,0.01)
-  tau.grp.mu ~ dgamma(1.0,0.01)
+  tau.grp.ind ~ dnorm(1000,1)
+  #tau.grp.ind ~ dgamma(1.0,0.01)   #dnorm(tau.grp.mu,0.1)
   fly.mean ~ dnorm(0,0.01)
   tau.fly ~ dgamma(1.0,0.01)
   tau.sp.det ~ dgamma(1.0,0.01)
   beta.det.0 ~ dnorm(0.0,10)
   beta.det.obs ~ dnorm(0.0,10)
   beta.det.fly~ dnorm(0.0,10)
-  beta.det.group~ dnorm(0.0,10)
+  beta.det.group.abs <- abs(beta.det.group)
+  beta.det.group~ dnorm(0.0,0.01)
 }
 
 n.species=10
-n.bins=9
+n.bins=5
 n.obs.bins=5
 source('./MRDSmove/R/simulate_mrds.R')
-Data <- simulate_mrds(n_species=n.species,n_bins=n.bins,n_obs_bins=n.obs.bins,seed=12345,p0=FALSE)
+Data <- simulate_mrds(n_species=n.species,n_bins=n.bins,n_obs_bins=n.obs.bins,measure_par=100000,move_par=100000,seed=12345,p0=FALSE)
 Obs1_data=Data$Obs_data[which(Data$Obs_data[,"det1"]==1),]
 
 M=500
@@ -81,7 +81,7 @@ for(isp in 1:n.species){
 library(rjags)
 library(R2jags)
 set.factory("bugs::Conjugate",FALSE, type="sampler")  #FALSE recommended by R. Sollman 
-set.factory("bugs::Slice",TRUE, type="sampler") 
+#set.factory("bugs::Slice",TRUE, type="sampler") 
 BinWidth=rep(1,n.bins)
 BinVal=c(1:5)
 ObsBins1.ext = c(1,1,1,1,1,0,0,0,0)
@@ -96,16 +96,16 @@ n_chains=1
 first.bin=1
 Small=rep(0.00001,n.obs.bins+1)
 Group.min1 = Group-1
-jags_data = list("Dist1","Z","n.species","n.bins","n.obs.bins","Group.min1","Fly","Det1","BinWidth","BinVal","ObsBins1.ext","M","Small","first.bin")
+jags_data = list("Dist1","Z","n.species","Group.min1","Fly","Det1","BinWidth","M")
 jags_params = c("Psi","beta.det.0","beta.det.fly","beta.det.group","beta.det.sp",
-                "mu.grp","tau.grp","tau.grp.mu","fly.mean","Fly.sp","tau.fly","tau.sp.det",
-                "Mu.grp")
-jags_save =c("G","N","Psi","beta.det.0","beta.det.obs","beta.det.fly","beta.det.group","Z[1,68]","Dist1[1,68]","Dist2.obs[1,68]","P.obs1[1,68]","P.obs2[1,68]","Group[1,68]")
+                "mu.grp","tau.grp","fly.mean","Fly.sp","tau.fly","tau.sp.det",
+                "Mu.grp","tau.grp.ind")
+jags_save =c("G","N","Psi","beta.det.0","beta.det.obs","beta.det.fly","beta.det.group","beta.det.sp","Fly.sp.expit","Mu.grp","tau.grp","tau.grp.ind","Mu.grp.ind[1,35]","mu.grp")
 
 jags.inits = function(){
   list("Psi"=runif(n.species,0.2,0.4),
        "beta.det.0"=rnorm(1,log(2),.1),"beta.det.fly"=rnorm(1,0,.1),"beta.det.group"=rnorm(1,0,.1),"beta.det.sp"=rnorm(n.species,0,.1),
-       "mu.grp" = rpois(1,3), "tau.grp"=runif(1,0.5,5.0), "tau.grp.mu"=runif(1,0.5,5.0),"fly.mean"=runif(1,0.2,0.8),"Fly.sp"=runif(n.species,0.2,0.8),"tau.fly"=runif(1,0.5,5.0),"tau.sp.det"=runif(1,0.5,5.0),
+       "mu.grp" = rpois(1,3), "tau.grp"=runif(1,0.5,5.0),"fly.mean"=runif(1,0.2,0.8),"Fly.sp"=runif(n.species,0.2,0.8),"tau.fly"=runif(1,0.5,5.0),"tau.sp.det"=runif(1,0.5,5.0),
        "Mu.grp"=rpois(n.species,3))
 }
 jags_fit = jags(data=jags_data,
@@ -120,4 +120,11 @@ jags_fit = jags(data=jags_data,
                 n.thin=n_thin,
                 working.directory=getwd())
 
-jags_fit$BUGSoutput$sims.matrix[1,]
+head(jags_fit$BUGSoutput$sims.matrix)
+Data$G_true
+Data$N_true
+summary(sqrt(1/jags_fit$BUGSoutput$sims.matrix[,"tau.grp"]))
+summary(jags_fit$BUGSoutput$sims.matrix[,"beta.det.group"])
+summary(jags_fit$BUGSoutput$sims.matrix[,"beta.det.fly"])
+summary(exp(jags_fit$BUGSoutput$sims.matrix[,"Mu.grp[4]"]))
+hist(jags_fit$BUGSoutput$sims.matrix[,"N[10]"])

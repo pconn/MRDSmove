@@ -2,8 +2,6 @@
 #' @param n_species Number of species to simulate data for
 #' @param n_bins Number of bins for complete data (note that measurement error can result in some of these being detected)
 #' @param n_obs_bins Number of detection bins
-#' @param measure_par Gives measurement error precision (if gaussian = TRUE) or measurement error rate (if gaussian=FALSE)
-#' @param move_par Gives movement precision (if gaussian = TRUE) or rate (if gaussian=FALSE)
 #' @param seed Optional; set the random # seed
 #' @param p0 If TRUE (default), detection probability is less than 1.0 in the first bin.  If FALSE, detection is 1.0 in first bin
 #' @param gaussian If TRUE, uses a Gaussian distribution for measurement error and a half-normal for movement; if FALSE (default), uses exponential / half exponential (Laplace dist)
@@ -11,7 +9,7 @@
 #' @export
 #' @keywords simulation, mrds
 #' @author Paul B. Conn
-simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=1.2,seed,p0=TRUE,gaussian=FALSE){
+simulate_mrds <- function(n_species,n_bins,n_obs_bins,seed,p0=TRUE,gaussian=FALSE){
   set.seed(seed)
   expit<-function(x)1/(1+exp(-x))
   logit<-function(x)log(x/(1-x))
@@ -26,8 +24,6 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=1
   
   ### model for sigma (half normal detection fall off; log link)
   beta_sigma_0 = log(1)
-  #beta_sigma_obs2= beta_sigma_fly = beta_sigma_group = 0
-  beta_sigma_sp=rep(0,n_species)
   beta_sigma_obs2 = -0.2
   beta_sigma_sp = rnorm(n_species,0,0.25)
   beta_sigma_fly = 0.5
@@ -35,13 +31,16 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=1
   
   ### group model - poisson-normal mixture
   Mu_group=rnorm(n_species,log(1),0.1)
-  sigma_grp=0.000001
-  #sigma_grp = 1.2
+  sigma_grp = 1.2
   
   ### measurement error model
-  rdexp <- function(n,my_par) ifelse(runif(n) > 0.5, 1, -1) * rexp(n,my_par) #double exponential random variates
-  #measure_par = 1.5  #par parameter for exponential distribution
-
+  rdexp <- function(n,my_rate) ifelse(runif(n) > 0.5, 1, -1) * rexp(n,my_rate) #double exponential random variates
+  #measure_rate = 1.5  #rate parameter for exponential distribution
+  measure_rate=0.6
+  
+  ### movement model
+  move_rate = 1.2
+  
   ### proportion flying
   Prop_fly = runif(n_species,0.4,0.8)
   
@@ -51,12 +50,12 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=1
   
   if(gaussian==TRUE){
     Diff_cell = c(0,1,2,3,4)  #number of cells possible for movement
-    Prob_move = dnorm(Diff_cell,0,1/move_par)
+    Prob_move = dnorm(Diff_cell,0,1/move_rate)
     Prob_move=Prob_move/sum(Prob_move)
     Prob_measure = matrix(0,n_bins,n_bins)
     for(ibin in 1:n_bins){
-      Low=c(0,pnorm(c(2:n_bins)-0.5,ibin,1/measure_par))
-      Up = pnorm(c(1:n_bins)+0.5,ibin,1/measure_par)
+      Low=c(0,pnorm(c(2:n_bins)-0.5,ibin,1/measure_rate))
+      Up = pnorm(c(1:n_bins)+0.5,ibin,1/measure_rate)
       Prob_measure[ibin,]=Up-Low
     }           
   }
@@ -72,8 +71,8 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=1
       for(irow in 1:(length(Cur_rows)))Complete_data[Cur_rows[irow],"d2_obs"]=rmultinom(1,Prob_measure[Complete_data[Cur_rows[irow],"d1_true"],])
     }
     else{
-      Complete_data[Cur_rows,"d2_true"] = floor(Complete_data[Cur_rows,"d1_true"] +  Complete_data[Cur_rows,"fly"]*rexp(N[isp],move_par))
-      Complete_data[Cur_rows,"d2_obs"] = Complete_data[Cur_rows,"d2_true"]+round(rdexp(N[isp],measure_par))
+      Complete_data[Cur_rows,"d2_true"] = floor(Complete_data[Cur_rows,"d1_true"] +  Complete_data[Cur_rows,"fly"]*rexp(N[isp],move_rate))
+      Complete_data[Cur_rows,"d2_obs"] = Complete_data[Cur_rows,"d2_true"]+round(rdexp(N[isp],measure_rate))
     }
     #detection | true distances, species, fly, group
     if(p0==TRUE){
@@ -83,7 +82,7 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=1
     }
     else{
       P_max_obs1 = 1.0
-      P_max_obs2 = 1.0
+      P_max.obs2 = 1.0
     }
     
     ### model for sigma (half normal detection fall off; log link)
@@ -92,8 +91,8 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=1
     Sigma_obs2 = exp(Temp+beta_sigma_obs2)
     P_det_obs1 = dnorm(Complete_data[Cur_rows,"d1_true"]-1,0,Sigma_obs1)/dnorm(0,0,Sigma_obs1)
     P_det_obs2 = dnorm(Complete_data[Cur_rows,"d2_true"]-1,0,Sigma_obs2)/dnorm(0,0,Sigma_obs2)
- 
-        ### determine detections
+    
+    ### determine detections
     Complete_data[Cur_rows,"det1"]=rbinom(N[isp],rep(1,N[isp]),P_max_obs1*P_det_obs1)
     Complete_data[Cur_rows,"det2"]=rbinom(N[isp],rep(1,N[isp]),P_max_obs1*P_det_obs2)
     
@@ -115,5 +114,5 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=1
     G_true[isp]=length(Which_sp_obs)
     N_true[isp]=sum(Complete_data[Which_sp_obs,"g_size"])
   }
-  return(list(Obs_data=Obs_data,Complete_data=Complete_data,G_true=G_true,N_true=N_true,Mu_group=Mu_group,Beta=list(beta_sigma_0,beta_sigma_sp,beta_sigma_fly,beta_sigma_group)))
+  return(list(Obs_data=Obs_data,Complete_data=Complete_data,G_true=G_true,N_true=N_true))
 }

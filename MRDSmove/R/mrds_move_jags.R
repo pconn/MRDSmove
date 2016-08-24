@@ -44,9 +44,8 @@ mrds.move.jags <- function(){
       
       #cluster/group model
       Group[isp,iind] <- Group.min1[isp,iind] + 1
-      Group.min1[isp,iind] ~ dpois(exp(Mu.grp.ind[isp,iind]))
-      Mu.grp.ind[isp,iind] ~ dnorm(Mu.grp[isp],tau.grp.ind.exp[isp])
-      
+      Group.min1[isp,iind] ~ dpois(Mu.grp.ind[isp,iind])
+      Mu.grp.ind[isp,iind] <- exp(Mu.grp[isp]+RE.grp[isp,iind])
     }
     #abundance model
     #Psi[isp] ~ dbeta(0.01,1)  #Link (2013) scale prior approx
@@ -68,6 +67,11 @@ mrds.move.jags <- function(){
     beta.p0.sp[isp] ~ dnorm(0.0,tau.sp.p0)
   }
  
+  for(isp2 in 1:n.species){
+    for(iind2 in 1:M.max){
+      RE.grp[isp2,iind2] ~ dnorm(0,tau.grp.ind.exp[isp2])
+    }
+  }
   
   #More priors
   mu.grp ~ dnorm(0,0.01)
@@ -99,7 +103,7 @@ n.bins=9
 n.obs.bins=5
 source('./MRDSmove/R/simulate_mrds.R')
 Data <- simulate_mrds(n_species=n.species,n_bins=n.bins,n_obs_bins=n.obs.bins,seed=12345,p0=FALSE)
-M=500
+M=M.max=500
 Det1 = Det2 =  matrix(0,n.species,M)
 Group = Fly = Z = Dist1 = Dist2.obs = Dist2.true = matrix(NA,n.species,M)
 Nobs = rep(0,n.species)
@@ -178,18 +182,18 @@ n_chains=1
 first.bin=1
 Small=rep(0.00001,n.obs.bins+1)
 Group.min1 = Group-1
-jags_data = list("Dist1","Dist2.true","Z","n.species","n.bins","n.obs.bins","Group.min1","Fly","Det1","Det2","Dist2.obs","BinWidth","BinVal","BinVal.ext","ObsBins1.ext","ObsBins2.ext","BinVal2","M","Small","first.bin")
+jags_data = list("Dist1","Dist2.true","Z","n.species","n.bins","n.obs.bins","Group.min1","Fly","Det1","Det2","Dist2.obs","BinWidth","BinVal","BinVal.ext","ObsBins1.ext","ObsBins2.ext","BinVal2","M","Small","first.bin","M.max")
 jags_params = c("Psi","beta.p0.0","beta.p0.obs","beta.p0.fly","beta.p0.group","beta.p0.sp",
                 "beta.det.0","beta.det.obs","beta.det.fly","beta.det.group","beta.det.sp",
                 "mu.grp","tau.grp","tau.grp.mu","fly.mean","Fly.sp","tau.fly","tau.sp.det","tau.sp.p0","rate.mu","Rate","tau.move","tau.measure",
-                "Mu.grp")
+                "Mu.grp","RE.grp")
 jags_save =c("G","N","tau.move","tau.measure","Psi","beta.det.0","beta.det.obs","beta.det.fly","beta.det.group","Z[1,68]","Dist1[1,68]","Dist2.obs[1,68]","P.obs1[1,68]","P.obs2[1,68]","Group[1,68]")
 
 jags.inits = function(){
   list("Psi"=runif(n.species,0.2,0.4),"beta.p0.0"=rnorm(1,1,.5),"beta.p0.obs"=rnorm(1,0,0.25),"beta.p0.fly"=rnorm(1,0,0.25),"beta.p0.group"=rnorm(1,0,0.25),beta.p0.sp=rnorm(n.species,0,0.25),
        "beta.det.0"=rnorm(1,log(2),.1),"beta.det.obs"=rnorm(1,0,.1),"beta.det.fly"=rnorm(1,0,.1),"beta.det.group"=rnorm(1,0,.1),beta.det.sp=rnorm(n.species,0,.1),
        "mu.grp" = rpois(1,3), "tau.grp"=runif(1,0.5,5.0), "tau.grp.mu"=runif(1,0.5,5.0),"fly.mean"=runif(1,0.2,0.8),"Fly.sp"=runif(n.species,0.2,0.8),"tau.fly"=runif(1,0.5,5.0),"tau.sp.det"=runif(1,0.5,5.0),"tau.sp.p0"=runif(1,0.5,5.0),
-       "rate.mu"=runif(1,0.1,2.0),"Rate"=runif(n.species,0.1,2.0),"tau.move"=runif(1,0.5,5.0),"tau.measure"=runif(1,10.0,11.0),"Mu.grp"=rpois(n.species,3))
+       "rate.mu"=runif(1,0.1,2.0),"Rate"=runif(n.species,0.1,2.0),"tau.move"=runif(1,0.5,5.0),"tau.measure"=runif(1,10.0,11.0),"Mu.grp"=rpois(n.species,3),"RE.grp"=matrix(rnorm(M.max*n.species,0,0.1),n.species,M.max))
 }
 jags_fit = jags(data=jags_data,
                 inits=jags.inits,
