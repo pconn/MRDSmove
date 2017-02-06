@@ -207,4 +207,5 @@ jags_fit = jags(data=jags_data,
                 n.thin=n_thin,
                 working.directory=getwd())
 
-jags_fit$BUGSoutput$sims.matrix[1,]
+head(jags_fit$BUGSoutput$sims.matrix)
+Data$G_true
