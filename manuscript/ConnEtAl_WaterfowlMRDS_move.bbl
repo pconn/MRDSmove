@@ -1,0 +1,75 @@
+\begin{thebibliography}{xx}
+
+\harvarditem{Alisauskas \harvardand\ Conn}{2017}{AlisauskasConn2017}
+Alisauskas, R.~T., \harvardand\ Conn, P.~B.  \harvardyearleft
+  2017\harvardyearright , ``Evaluating detectability of Arctic waterfowl
+  populations in double-observer helicopter surveys,'' , .
+
+\harvarditem[Borchers et~al.]{Borchers, Laake, Southwell \harvardand\
+  Paxton}{2006}{BorchersEtAl2006}
+Borchers, D.~L., Laake, J.~L., Southwell, C., \harvardand\ Paxton, C. G.~M.
+  \harvardyearleft 2006\harvardyearright , ``Accomodating unmodeled
+  heterogeneity in double-observer distance sampling surveys,'' {\em
+  Biometrics}, 62,~372--378.
+
+\harvarditem[Borchers et~al.]{Borchers, Stevenson, Kidney, Thomas \harvardand\
+  Marques}{2015}{BorchersEtAl2015}
+Borchers, D.~L., Stevenson, B.~C., Kidney, D., Thomas, L., \harvardand\
+  Marques, T.~A.  \harvardyearleft 2015\harvardyearright , ``A unifying model
+  for capture--recapture and distance sampling surveys of wildlife
+  populations,'' {\em Journal of the American Statistical Association},
+  110(509),~195--204.
+
+\harvarditem[Borchers et~al.]{Borchers, Zucchini \harvardand\
+  Fewster}{1998}{BorchersEtAl1998}
+Borchers, D.~L., Zucchini, W., \harvardand\ Fewster, R.~M.  \harvardyearleft
+  1998\harvardyearright , ``Mark-recapture models for line transect surveys,''
+  {\em Biometrics}, 54,~1207--1220.
+
+\harvarditem[Borchers et~al.]{Borchers, Marques, Gunnlaugsson \harvardand\
+  Jupp}{2010}{BorchersEtAl2010}
+Borchers, D., Marques, T., Gunnlaugsson, T., \harvardand\ Jupp, P.
+  \harvardyearleft 2010\harvardyearright , ``Estimating distance sampling
+  detection functions when distances are measured with errors,'' {\em Journal
+  of Agricultural, Biological, and Environmental Statistics}, 15(3),~346--361.
+
+\harvarditem[Buckland et~al.]{Buckland, Anderson, Burnham, Laake, Borchers
+  \harvardand\ Thomas}{2001}{BucklandEtAl2001}
+Buckland, S.~T., Anderson, D.~R., Burnham, K.~P., Laake, J.~L., Borchers,
+  D.~L., \harvardand\ Thomas, L.  \harvardyearleft 2001\harvardyearright , {\em
+  Introduction to Distance Sampling: Estimating the abundance of biological
+  populations}, Oxford, U.K.: Oxford University Press.
+
+\harvarditem[Buckland et~al.]{Buckland, Laake \harvardand\
+  Borchers}{2010}{BucklandEtAl2010}
+Buckland, S.~T., Laake, J.~L., \harvardand\ Borchers, D.~L.  \harvardyearleft
+  2010\harvardyearright , ``Double-observer line transect methods: Levels of
+  independence,'' {\em Biometrics}, 66,~169--177.
+
+\harvarditem[Burnham et~al.]{Burnham, Anderson \harvardand\
+  Laake}{1980}{BurnhamEtAl1980}
+Burnham, K.~P., Anderson, D.~R., \harvardand\ Laake, J.~L.  \harvardyearleft
+  1980\harvardyearright , ``Estimation of density for line transect sampling of
+  biological populations,'' {\em Wildlife Monographs}, 72,~7--202.
+
+\harvarditem[Burt et~al.]{Burt, Borchers, Jenkins \harvardand\
+  Marques}{2014}{BurtEtAl2014}
+Burt, M.~L., Borchers, D.~L., Jenkins, K.~J., \harvardand\ Marques, T.~A.
+  \harvardyearleft 2014\harvardyearright , ``Using mark--recapture distance
+  sampling methods on line transect surveys,'' {\em Methods in Ecology and
+  Evolution}, 5(11),~1180--1191.
+
+\harvarditem[Glennie et~al.]{Glennie, Buckland \harvardand\
+  Thomas}{2015}{GlennieEtAl2015}
+Glennie, R., Buckland, S.~T., \harvardand\ Thomas, L.  \harvardyearleft
+  2015\harvardyearright , ``The effect of animal movement on line transect
+  estimates of abundance,'' {\em PloS one}, 10(3),~e0121333.
+
+\harvarditem{Laake \harvardand\ Borchers}{2004}{LaakeBorchers2004}
+Laake, J.~L., \harvardand\ Borchers, D.~L.  \harvardyearleft
+  2004\harvardyearright , ``Methods for incomplete detection at distance
+  zero,'' in {\em Advanced Distance Sampling}, eds. S.~Buckland, D.~Anderson,
+  K.~Burnham, J.~Laake, D.~Borchers, \harvardand\ L.~Thomas, Oxford, U.K.:
+  Oxford University Press, pp.~108--189.
+
+\end{thebibliography}

@@ -1,7 +1,8 @@
-#' simulate waterfowl community MRDS double observer data subject to movement and measurement error
+#' simulate waterfowl community MRDS double observer data subject to movement and measurement error.  This version uses a half-normal detection function.
 #' @param n_species Number of species to simulate data for
 #' @param n_bins Number of bins for complete data (note that measurement error can result in some of these being detected)
 #' @param n_obs_bins Number of bins observed
+#' @param N true abundance within the complete data area
 #' @param measure_par Gives measurement error sd (if gaussian = TRUE) or measurement error rate (if gaussian=FALSE)
 #' @param move_par 2 parameter vector movement sd (if gaussian = TRUE) or rate (if gaussian=FALSE) for responseive movement 
 #' @param seed Optional; set the random # seed
@@ -11,26 +12,30 @@
 #' @export
 #' @keywords simulation, mrds
 #' @author Paul B. Conn
-simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=c(0.1,1.2),seed=NULL,gaussian=FALSE,point_indep=FALSE){
+simulate_mrds_hn <- function(n_species,n_bins,n_obs_bins,N,measure_par=0.6,move_par=c(0.1,1.2),seed=NULL,gaussian=FALSE,point_indep=FALSE){
   if(is.null(seed)==FALSE)set.seed(seed)
   expit<-function(x)1/(1+exp(-x))
   logit<-function(x)log(x/(1-x))
-  N<-round(runif(n_species,1499.5,1500.5))
-  
+ 
   ###  model for detection probability
-  beta_p_0 = 1
-  beta_p_obs2 = 0 #-0.5
-  #beta_p_sp = rnorm(n_species,0,0.25)
-  beta_p_sp = 0
-  if(n_species>1)beta_p_sp=c(0,rnorm(n_species-1,0,0.25))
-  beta_p_fly = 0.5
-  beta_p_dist = .07
-  if(!point_indep)beta_p_dist2 = rep(-0.09,N)
-  if(point_indep)beta_p_dist2 = runif(N,-0.02,0.16)
-  beta_p_group = 0 #0.1
-  beta_p_pi = 0
-  #if(point_indep)beta_p_pi = 0.5
+  #1) sigma
+  beta_sigma_0 = 1
+  beta_sigma_obs2 = 0 #-0.5
+  beta_sigma_sp = 0
+  if(n_species>1)beta_sigma_sp=c(0,rnorm(n_species-1,0,0.1))
+  beta_sigma_fly = 0.2
+  RE=0
+  if(point_indep)RE=runif(N,-0.7,0.7)
+  beta_sigma_group = 0 #0.1
 
+  #2) g0
+  beta_g0_0 = 1
+  beta_g0_obs2 = 0 #-0.5
+  beta_g0_sp = 0
+  if(n_species>1)beta_g0_sp=c(0,rnorm(n_species-1,0,0.25))
+  beta_g0_fly = 0.5
+  beta_g0_group = 0 #0.1
+  
   Bin.midpoints = c(0:(n_bins-1))+0.5
   
   ### group model - poisson-normal mixture
@@ -84,12 +89,17 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=c
 
     #detection | true distances, species, fly, group
 
-    ### polynomial detection model
+    ### polynomial detection model for g0, sigma
+    G0_det_obs1 = expit(beta_g0_0 + beta_g0_sp[Complete_data[Cur_rows,"species"]] + beta_g0_fly*Complete_data[Cur_rows,"fly"] + beta_g0_group*Complete_data[Cur_rows,"g_size"])
+    G0_det_obs2 = expit(beta_g0_0 + beta_g0_obs2 + beta_g0_sp[Complete_data[Cur_rows,"species"]] + beta_g0_fly*Complete_data[Cur_rows,"fly"] + beta_g0_group*Complete_data[Cur_rows,"g_size"]) 
+    Sigma_det_obs1 = exp(beta_sigma_0 + beta_sigma_sp[Complete_data[Cur_rows,"species"]] + beta_sigma_fly*Complete_data[Cur_rows,"fly"] + beta_sigma_group*Complete_data[Cur_rows,"g_size"]+RE)
+    Sigma_det_obs2 = exp(beta_sigma_0 + beta_sigma_obs2 + beta_sigma_sp[Complete_data[Cur_rows,"species"]] + beta_sigma_fly*Complete_data[Cur_rows,"fly"] + beta_sigma_group*Complete_data[Cur_rows,"g_size"]+RE) 
+    P_det_obs1 = G0_det_obs1*dnorm(Complete_data[Cur_rows,"d1_true"],1,Sigma_det_obs1)/dnorm(1,1,Sigma_det_obs1)
+    P_det_obs2 = G0_det_obs2*dnorm(Complete_data[Cur_rows,"d2_true"],1,Sigma_det_obs2)/dnorm(1,1,Sigma_det_obs2)
 
-    P_det_obs1 = expit(beta_p_0 + beta_p_sp[Complete_data[Cur_rows,"species"]] + beta_p_fly*Complete_data[Cur_rows,"fly"] + beta_p_group*Complete_data[Cur_rows,"g_size"] + beta_p_dist*Complete_data[Cur_rows,"d1_true"] + beta_p_dist2*(Complete_data[Cur_rows,"d1_true"])^2)
-    P_det_obs2 = expit(beta_p_0 + beta_p_obs2 + beta_p_sp[Complete_data[Cur_rows,"species"]] + beta_p_fly*Complete_data[Cur_rows,"fly"] + beta_p_group*Complete_data[Cur_rows,"g_size"] + beta_p_dist*Complete_data[Cur_rows,"d2_true"] + beta_p_dist2*(Complete_data[Cur_rows,"d2_true"])^2) 
- 
-        ### determine detections
+    
+    
+    ### determine detections
     Complete_data[Cur_rows,"det1"]=rbinom(N[isp],rep(1,N[isp]),P_det_obs1)
     Complete_data[Cur_rows,"det2"]=rbinom(N[isp],rep(1,N[isp]),P_det_obs2)
     
@@ -110,5 +120,5 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=c
     G_true[isp]=length(Which_sp_obs)
     N_true[isp]=sum(Complete_data[Which_sp_obs,"g_size"])
   }
-  return(list(Obs_data=Obs_data,Complete_data=Complete_data,G_true=G_true,N_true=N_true,Mu_group=Mu_group,Beta=list(beta_p_0,beta_p_sp,beta_p_fly,beta_p_group,beta_p_dist,beta_p_dist2)))
+  return(list(Obs_data=Obs_data,Complete_data=Complete_data,G_true=G_true,N_true=N_true,Mu_group=Mu_group,Beta=list(beta_sigma_0,beta_sigma_sp,beta_sigma_obs2,beta_sigma_fly,beta_sigma_group)))
 }
