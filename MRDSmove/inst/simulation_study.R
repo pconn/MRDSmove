@@ -17,10 +17,10 @@ start.time = Sys.time()
 
 M.pars = matrix(0.0001,6,3)
 M.pars[2,] = c(.7,.7,0.0001)
-M.pars[3,] = c(0.3,1.5,0.0001)
-M.pars[4,3] = 0.3
-M.pars[5,] = c(.7,.7,.3)
-M.pars[6,] = c(0.3,1.5,.3)
+M.pars[3,] = c(0.5,1.5,0.0001)
+M.pars[4,3] = 0.5
+M.pars[5,] = c(.7,.7,0.5)
+M.pars[6,] = c(0.5,1.5,0.5)
 Obs.bins=c(1:n.obs.bins)
 
 N.est= SE = Cov = array(0,dim=c(n.sims,6,3))  # 6 M options * 2 dependence options * 3 estimation models
@@ -31,10 +31,10 @@ for(isim in 1:n.sims){
   cat(paste("\n simulation ",isim,"\n"))
   for(iM in 1:6){
     for(idep in 0:0){
-      Sim_data <- simulate_mrds(n_species=1,n_bins=15,n_obs_bins=5,measure_par=M.pars[iM,3],move_par=M.pars[iM,1:2],gaussian=TRUE,point_indep=idep)
+      Sim_data <- simulate_mrds(n_species=1,n_bins=10,n_obs_bins=5,measure_par=M.pars[iM,3],move_par=M.pars[iM,1:2],gaussian=TRUE,point_indep=idep)
       Obs_data=data.frame(Sim_data$Obs_data)
       
-      if(sum(Obs_data$d2_obs<Obs_data$d1_obs,na.rm=TRUE)==0 & iM%in%c(2,3,5,6)){  #if ther aren't any obs2 distances <obs1 distances it can lead to a noninvertible Hessian 
+      if(sum(Obs_data$d2_obs<Obs_data$d1_obs,na.rm=TRUE)==0 & iM%in%c(2,3,5,6)){  #if there aren't any obs2 distances <obs1 distances it can lead to a noninvertible Hessian 
         Sim_data <- simulate_mrds(n_species=1,n_bins=15,n_obs_bins=5,measure_par=M.pars[iM,3],move_par=M.pars[iM,1:2],gaussian=TRUE,point_indep=idep)
         Obs_data=data.frame(Sim_data$Obs_data)
       }
@@ -57,7 +57,7 @@ for(isim in 1:n.sims){
       Data$count = rep(Counts[Order],each=2)
       
       N.true[isim,iM] = sum(Sim_data$Complete_data[,"d1_true"]%in%Obs.bins)
-      Which.fix = which(M.pars[iM,] < 0.01)
+      Which.fix = which(M.pars[iM,] == 0.0001 | M.pars[iM,] == 20)
       my.par = c(1,.07,-.09,.5)
       Move.fix = rep(0,3)
       if(length(Which.fix)==0)my.par = c(my.par,log(M.pars[iM,]))
@@ -67,21 +67,27 @@ for(isim in 1:n.sims){
       my.formula=~distance+distance2+moving
            
       # (1) 8 bin integrated likelihood
-      glm_out = optim(par=my.par,MRDSmove_IntLik,hessian=TRUE,method="BFGS",Data=Data,mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian=TRUE)
+      glm_out = optim(par=my.par,MRDSmove_IntLik,hessian=TRUE,method="BFGS",Data=Data,mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
       glm_out$par
-      Sigma = solve(glm_out$hessian)
-      sqrt(diag(solve(glm_out$hessian)))   
+      Sigma = try(solve(glm_out$hessian),TRUE)
+      #sqrt(diag(solve(glm_out$hessian)))   
       #ht estimate and SE
-      g_est = ht_mrds(Par=glm_out$par,Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian=TRUE)
-      Par.boot = rmvnorm(n.bootstraps,glm_out$par,sigma=Sigma)
-      N_boot = rep(0,n.bootstraps)
-      for(iboot in 1:n.bootstraps){
-        N_boot[iboot]=ht_mrds(Par=Par.boot[iboot,],Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian=TRUE)
+      if(class(Sigma)!="matrix")N.est[isim,iM,1]=SE[isim,iM,1]=Cov[isim,iM,1]=NA
+      else{
+        if(sum(diag(Sigma))<0 | max(diag(Sigma))>10)N.est[isim,iM,1]=SE[isim,iM,1]=Cov[isim,iM,1]=NA
+        else{
+          g_est = ht_mrds(Par=glm_out$par,Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
+          Par.boot = rmvnorm(n.bootstraps,glm_out$par,sigma=Sigma)
+          N_boot = rep(0,n.bootstraps)
+          for(iboot in 1:n.bootstraps){
+            N_boot[iboot]=ht_mrds(Par=Par.boot[iboot,],Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
+          }
+          N.est[isim,iM,1]=g_est
+          SE[isim,iM,1] = sqrt(var(N_boot))
+          Cov[isim,iM,1] = ((N.true[isim,iM] > quantile(N_boot,0.025)) & (N.true[isim,iM]<= quantile(N_boot,0.975)))
+        }
       }
-      N.est[isim,iM,1]=g_est
-      SE[isim,iM,1] = sqrt(var(N_boot))
-      Cov[isim,iM,1] = ((N.true[isim,iM] > quantile(N_boot,0.025)) & (N.true[isim,iM]<= quantile(N_boot,0.975)))
-
+      
       # # (2) 10 bin integrated likelihood  - results within about 0.0001 of results from 8 bins
       # glm_out = optim(par=my.par,MRDSmove_IntLik,hessian=TRUE,method="BFGS",Data=Data,mod.formula=my.formula,Bin.widths=rep(1,10),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian=TRUE)
       # glm_out$par

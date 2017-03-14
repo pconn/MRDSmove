@@ -1,19 +1,11 @@
-### function to produce horvitz-thompson like estimators of abundance that
-# integrate over true distance bin using Bayes rule to get the mixing distribution
 
-expit<-function(x)(1/(1+exp(-x)))
-
-
-#' Calculate Horvitz-Thompson like estimator from detection, movement, and measurement error parameters by integrating
-#' over latent distance using Bayes rule.  Currently conditioning on animal being available to be detected (i.e. within Obs.bins) for the 1st observer.
-#' This version allows observer dependence (e.g. point or limiting independence) through dep.formula.
-#' @param Parameter vector, including detection parameters, movement error SDs (left and right tail), measurement error SD
+#   function to simulate MRDS data w/ movement and measurement error from model estimates.  Note: not set up to deal with counts>1
+#' @param Par Parameter vector, including detection parameters, movement error SDs (left and right tail), measurement error SD
 #' @param Data A design.matrix with the following column names: "match" indicates which records match with which (there should be two records
 #'        for each detection, one for each observer), "observer","species" (provides species or other grouping variable: abundance estimates will be provided separately for each), 
 #'       "obs.dist" (observed distance; NA if missing), "g_size" (group/cluster size), "moving" (binary indicator for moving/not moving), 
 #'       "detected" (binary detection/nondetection). Finally, the optional column "count" gives the count of histories observed a particular type (to make likelihood calculations faster).
 #'        Additional covariates may also be provided and used in formula (e.g. "other"; see below)
-#' @param G A vector of group sizes, one for each detected animal cluster
 #' @param p.formula Formula object giving formula for detection probability for each observer.  Variables can be linked to column names in Data, 
 #'        but need to use "distance" to represent distance and "distance2" to represent distance^2.  
 #' @param dep.formula Another formula object, this time giving the structure of observer dependence.  For example, ~0+distance:det_other can provide
@@ -27,7 +19,7 @@ expit<-function(x)(1/(1+exp(-x)))
 #' @export
 #' @keywords simulation, mrds
 #' @author Paul B. Conn
-ht_mrds_ObsDep <- function(Par,Data,G,p.formula,dep.formula,Bin.widths,Obs.bins,Move.fix=Move.fix,gaussian.move=FALSE,gaussian.meas=FALSE){
+sim_mrds_GOF_ObsDep <- function(Par,Data,p.formula,dep.formula,Bin.widths,Obs.bins,Move.fix=Move.fix,gaussian.move=FALSE,gaussian.meas=FALSE){
   Cur.par = Par
   n.par = length(Par)
   if(is.null(Move.fix)==FALSE | sum(Move.fix)>0){
@@ -71,10 +63,6 @@ ht_mrds_ObsDep <- function(Par,Data,G,p.formula,dep.formula,Bin.widths,Obs.bins,
   Move = Data$moving[2*(1:n.hists)-1]
   Hist.type = Detected[1,]-Detected[2,]  #so 01 is a -1, 11 is a 0, 10 is a 1
   Which.move = which(Move==1)
-  Which.11 = which(Hist.type==0)
-  Which.01 = which(Hist.type==-1)
-  Which.10 = which(Hist.type==1)
-
   
   #parameterize Psi transition matrix, Measurement error matrix
   Psi = Meas = matrix(0,n.bins,n.bins)
@@ -100,6 +88,9 @@ ht_mrds_ObsDep <- function(Par,Data,G,p.formula,dep.formula,Bin.widths,Obs.bins,
   P.hist = rep(0,n.hists)
   P = P.yes = P.no = array(0,dim=c(n.bins,n.bins,2,n.hists))  #to hold (conditional) detection probabilities for each observer
   Det_other = Data$det_other
+  
+  Obs.prob = rep(0,n.obs.bins^2+2*n.obs.bins)  #total # history types = ways to get a 11 history + ways to get a 10 history + ways to get a 01 history
+  Prob.bins = c(1:(n.obs.bins^2+2*n.obs.bins))
 
   # #1) calculate probability of being in d1, d2 given detection history
   P.dist = P.dot = array(1,dim=c(n.bins,n.bins,n.hists))  
@@ -118,9 +109,6 @@ ht_mrds_ObsDep <- function(Par,Data,G,p.formula,dep.formula,Bin.widths,Obs.bins,
       X.dep = model.matrix(dep.formula,Data)
       P.yes[ibin1,ibin2,,]=expit(X%*%Par[Which.beta.p]+X.dep%*%Par[Which.beta.dep]) #other observer detects
       Data$det_other=Det_other
-      #P.dot[ibin1,ibin2,]=Pin[ibin1]*Pin[ibin2]*P.yes[ibin1,ibin2,1,]*P.yes[ibin1,ibin2,2,]+
-      #  P.no[ibin1,ibin2,1,]*Pin[ibin1]*(P.yes[ibin1,ibin2,2,]*(1-Pin[ibin2])+(1-P.yes[ibin1,ibin2,2,]))+
-      #  P.no[ibin1,ibin2,2,]*Pin[ibin2]*(P.yes[ibin1,ibin2,1,]*(1-Pin[ibin1])+(1-P.yes[ibin1,ibin2,1,]))
       P.dot[ibin1,ibin2,]=Pin[ibin1]*Pin[ibin2]*P.yes[ibin1,ibin2,1,]*P.yes[ibin1,ibin2,2,]+
         P.yes[ibin1,ibin2,1,]*P.yes[ibin1,ibin2,2,]*Pin[ibin1]*(1-Pin[ibin2])+
         P.no[ibin1,ibin2,1,]*Pin[ibin1]*(1-P.yes[ibin1,ibin2,2,])+
@@ -128,23 +116,42 @@ ht_mrds_ObsDep <- function(Par,Data,G,p.formula,dep.formula,Bin.widths,Obs.bins,
         P.no[ibin1,ibin2,2,]*Pin[ibin2]*(1-P.yes[ibin1,ibin2,1,])
       P.dist[ibin1,ibin2,Which.move] = Dist.probs[ibin1]*Psi[ibin1,ibin2]
       P.dist[ibin1,ibin2,-Which.move] = Dist.probs[ibin1]*Psi.nomove[ibin1,ibin2]
-      # P.dist[ibin1,ibin2,Which.11] = P.dist[ibin1,ibin2,Which.11]*P[ibin1,ibin2,1,Which.11]*P[ibin1,ibin2,2,Which.11]*Meas[ibin1,Obs.dists[1,Which.11]]*Meas[ibin2,Obs.dists[2,Which.11]]
-      # #components of Pr(10 hists)
-      # P.dist[ibin1,ibin2,Which.10] = P.dist[ibin1,ibin2,Which.10]*P[ibin1,ibin2,1,Which.10]*(1-P[ibin1,ibin2,2,Which.10]*sum(Meas[ibin2,Obs.bins]))*Meas[ibin1,Obs.dists[1,Which.10]]
-      # #components of Pr(01 hists)
-      # P.dist[ibin1,ibin2,Which.01] = P.dist[ibin1,ibin2,Which.01]*P[ibin1,ibin2,2,Which.01]*(1-P[ibin1,ibin2,1,Which.01]*sum(Meas[ibin1,Obs.bins]))*Meas[ibin2,Obs.dists[2,Which.01]]
-      P.dist[ibin1,ibin2,Which.11] = P.dist[ibin1,ibin2,Which.11]*P[ibin1,ibin2,1,Which.11]*P[ibin1,ibin2,2,Which.11]*Meas[ibin1,Obs.dists[1,Which.11]]*Meas[ibin2,Obs.dists[2,Which.11]]
-      #components of Pr(10 hists)
-      P.dist[ibin1,ibin2,Which.10] = P.dist[ibin1,ibin2,Which.10]*(P.yes[ibin1,ibin2,1,Which.10]*P.yes[ibin1,ibin2,2,Which.10]*Meas[ibin1,Obs.dists[1,Which.10]]*(1-Pin[ibin2])+P.no[ibin1,ibin2,1,Which.10]*(1-P.yes[ibin1,ibin2,2,Which.10])*Meas[ibin1,Obs.dists[1,Which.10]])
-      #components of Pr(01 hists)
-      P.dist[ibin1,ibin2,Which.01] = P.dist[ibin1,ibin2,Which.01]*(P.yes[ibin1,ibin2,2,Which.01]*P.yes[ibin1,ibin2,1,Which.01]*Meas[ibin2,Obs.dists[2,Which.01]]*(1-Pin[ibin1])+P.no[ibin1,ibin2,2,Which.01]*(1-P.yes[ibin1,ibin2,1,Which.01])*Meas[ibin2,Obs.dists[2,Which.01]])
-    }
+      P.dist[ibin1,ibin2,] = P.dist[ibin1,ibin2,]*P.dot[ibin1,ibin2,]    }
   }
   N.hat = rep(0,n.hists)
   for(ihist in 1:n.hists){
     P.dist[,,ihist]=P.dist[,,ihist]/sum(P.dist[,,ihist])
-    N.hat[ihist] = sum(G[ihist] * Count[ihist] * P.dist[c(1:n.obs.bins),,ihist] / P.dot[c(1:n.obs.bins),,ihist])
+    Cur.dist=mat_sample(P.dist[,,ihist])
+    Data[(ihist*2-1):(ihist*2),"distance"]=Cur.dist
+    #determine probability of getting one of the n.obs.bins^2+2*n.obs.bins combinations of detection and distance
+    #1) 11 history
+    Obs.prob[1:(n.obs.bins^2)] = P.yes[Cur.dist[1],Cur.dist[2],1,ihist]*P.yes[Cur.dist[1],Cur.dist[2],2,ihist]
+    bin.counter=1
+    for(ibin1 in 1:n.obs.bins){
+      for(ibin2 in 1:n.obs.bins){
+        Obs.prob[bin.counter]=Obs.prob[bin.counter]*Meas[Cur.dist[1],ibin1]*Meas[Cur.dist[2],ibin2]
+        bin.counter=bin.counter+1
+      }
+    }
+    #2) 10 history
+    Obs.prob[(n.obs.bins^2+1):(n.obs.bins^2+n.obs.bins)] = P.no[Cur.dist[1],Cur.dist[2],1,ihist]*(1-P.yes[Cur.dist[1],Cur.dist[2],2,ihist])+
+                                                           P.yes[Cur.dist[1],Cur.dist[2],1,ihist]*P.yes[Cur.dist[1],Cur.dist[2],2,ihist]*(1-Pin[Cur.dist[2]])
+    for(ibin1 in 1:n.obs.bins){
+      Obs.prob[bin.counter]=Obs.prob[bin.counter]*Meas[Cur.dist[1],ibin1]
+      bin.counter=bin.counter+1
+    }    
+    #2) 01 history
+    Obs.prob[(n.obs.bins^2+n.obs.bins+1):(n.obs.bins^2+2*n.obs.bins)] = P.no[Cur.dist[1],Cur.dist[2],2,ihist]*(1-P.yes[Cur.dist[1],Cur.dist[2],1,ihist])+
+                                                            P.yes[Cur.dist[1],Cur.dist[2],2,ihist]*P.yes[Cur.dist[1],Cur.dist[2],1,ihist]*(1-Pin[Cur.dist[1]])
+    for(ibin2 in 1:n.obs.bins){
+      Obs.prob[bin.counter]=Obs.prob[bin.counter]*Meas[Cur.dist[2],ibin2]
+      bin.counter=bin.counter+1
+    }   
+
+    cur.bin=sample(Prob.bins,1,prob=Obs.prob)
+    Data[(ihist*2-1):(ihist*2),"cur.bin"]=cur.bin
+    Data[(ihist*2-1):(ihist*2),"detected"]=get_detection(cur.bin,n.obs.bins)
+    Data[(ihist*2-1):(ihist*2),"obs.dist"]=get_distance(cur.bin,n.obs.bins)
   }
-  n.hat = sum(N.hat)
-  n.hat
+  Data
 }

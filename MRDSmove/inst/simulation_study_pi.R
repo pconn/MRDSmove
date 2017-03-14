@@ -24,7 +24,7 @@ start.time = Sys.time()
 
 M.pars = matrix(0.0001,2,3)
 #M.pars[1,] = c(.7,.7,.3)
-M.pars[2,] = c(0.0001,1.5,.3)
+M.pars[2,] = c(0.0001,1.5,.5)
 Obs.bins=c(1:n.obs.bins)
 
 N.vals = c(400,2000)
@@ -69,24 +69,26 @@ for(isim in 1:n.sims){
         
         #### MODELS WITH PI PARAM 
         # (1) 8 bin integrated likelihood
-        glm_out = optim(par=my.par,MRDSmove_IntLik_ObsDep,hessian=TRUE,method="BFGS",Data=Data,p.formula=p.formula,dep.formula=dep.formula,Bin.widths=rep(1,8),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian=TRUE)
+        glm_out = optim(par=my.par,MRDSmove_IntLik_ObsDep,hessian=TRUE,method="BFGS",Data=Data,p.formula=p.formula,dep.formula=dep.formula,Bin.widths=rep(1,8),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
         #glm_out$par
         #Sigma = solve(hessian(MRDSmove_IntLik_ObsDep,glm_out$par,Data=Data,p.formula=p.formula,dep.formula=dep.formula,Bin.widths=rep(1,8),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian=TRUE))
-        Sigma = solve(glm_out$hessian)
-        if(sum(diag(Sigma)<0)>0)N.est[isim,iN,iM,1] = SE[isim,iN,iM,1] = Cov[isim,iN,iM,1] = NA
+        Sigma = try(solve(glm_out$hessian))
+        if(class(Sigma)!="matrix")N.est[isim,iN,iM,1] = SE[isim,iN,iM,1] = Cov[isim,iN,iM,1] = NA
         else{
-          #ht estimate and SE
-          g_est = ht_mrds_ObsDep(Par=glm_out$par,Data=Data,G=rep(1,n.hists),p.formula=p.formula,dep.formula=dep.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian=TRUE)
-          Par.boot = rmvnorm(n.bootstraps,glm_out$par,sigma=Sigma)
-          N_boot = rep(0,n.bootstraps)
-          for(iboot in 1:n.bootstraps){
-            N_boot[iboot]=ht_mrds_ObsDep(Par=Par.boot[iboot,],Data=Data,G=rep(1,n.hists),p.formula=p.formula,dep.formula=dep.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian=TRUE)
+          if(sum(diag(Sigma)<0)>0 | max(diag(Sigma))>10)N.est[isim,iN,iM,1] = SE[isim,iN,iM,1] = Cov[isim,iN,iM,1] = NA
+          else{
+            #ht estimate and SE
+            g_est = ht_mrds_ObsDep(Par=glm_out$par,Data=Data,G=rep(1,n.hists),p.formula=p.formula,dep.formula=dep.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
+            Par.boot = rmvnorm(n.bootstraps,glm_out$par,sigma=Sigma)
+            N_boot = rep(0,n.bootstraps)
+            for(iboot in 1:n.bootstraps){
+              N_boot[iboot]=ht_mrds_ObsDep(Par=Par.boot[iboot,],Data=Data,G=rep(1,n.hists),p.formula=p.formula,dep.formula=dep.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
+            }
+            N.est[isim,iN,iM,1]=g_est
+            SE[isim,iN,iM,1] = sqrt(var(N_boot))
+            Cov[isim,iN,iM,1] = ((N.true[isim,iN,iM] > quantile(N_boot,0.025)) & (N.true[isim,iN,iM]<= quantile(N_boot,0.975)))
           }
-          N.est[isim,iN,iM,1]=g_est
-          SE[isim,iN,iM,1] = sqrt(var(N_boot))
-          Cov[isim,iN,iM,1] = ((N.true[isim,iN,iM] > quantile(N_boot,0.025)) & (N.true[isim,iN,iM]<= quantile(N_boot,0.975)))
         }
-        
         my.formula=~distance+distance2+moving
         
         #### FI models
@@ -94,24 +96,26 @@ for(isim in 1:n.sims){
         my.par = c(1,.07,-.09,.5)
         if(length(Which.fix)==0)my.par = c(my.par,log(M.pars[iM,]))
         if(length(Which.fix)<3 & length(Which.fix)>0)my.par = c(my.par,log(M.pars[iM,-Which.fix]))
-        glm_out = optim(par=my.par,MRDSmove_IntLik,hessian=TRUE,method="BFGS",Data=Data,mod.formula=p.formula,Bin.widths=rep(1,8),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian=TRUE)
+        glm_out = optim(par=my.par,MRDSmove_IntLik,hessian=TRUE,method="BFGS",Data=Data,mod.formula=p.formula,Bin.widths=rep(1,8),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
         glm_out$par
-        Sigma = solve(glm_out$hessian)
+        Sigma = try(solve(glm_out$hessian))
         #sqrt(diag(solve(glm_out$hessian)))   
-        if(sum(diag(Sigma)<0)>0)N.est[isim,iN,iM,2] = SE[isim,iN,iM,2] = Cov[isim,iN,iM,2] = NA
+        if(class(Sigma)!="matrix")N.est[isim,iN,iM,2] = SE[isim,iN,iM,2] = Cov[isim,iN,iM,2] = NA
         else{
-          #ht estimate and SE
-          g_est = ht_mrds(Par=glm_out$par,Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian=TRUE)
-          Par.boot = rmvnorm(n.bootstraps,glm_out$par,sigma=Sigma)
-          N_boot = rep(0,n.bootstraps)
-          for(iboot in 1:n.bootstraps){
-            N_boot[iboot]=ht_mrds(Par=Par.boot[iboot,],Data=Data,G=rep(1,n.hists),mod.formula=p.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian=TRUE)
+          if(sum(diag(Sigma)<0)>0 | max(diag(Sigma))>10)N.est[isim,iN,iM,2] = SE[isim,iN,iM,2] = Cov[isim,iN,iM,2] = NA
+          else{
+            #ht estimate and SE
+            g_est = ht_mrds(Par=glm_out$par,Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
+            Par.boot = rmvnorm(n.bootstraps,glm_out$par,sigma=Sigma)
+            N_boot = rep(0,n.bootstraps)
+            for(iboot in 1:n.bootstraps){
+              N_boot[iboot]=ht_mrds(Par=Par.boot[iboot,],Data=Data,G=rep(1,n.hists),mod.formula=p.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
+            }
+            N.est[isim,iN,iM,2]=g_est
+            SE[isim,iN,iM,2] = sqrt(var(N_boot))
+            Cov[isim,iN,iM,2] = ((N.true[isim,iN,iM] > quantile(N_boot,0.025)) & (N.true[isim,iN,iM]<= quantile(N_boot,0.975)))
           }
-          N.est[isim,iN,iM,2]=g_est
-          SE[isim,iN,iM,2] = sqrt(var(N_boot))
-          Cov[isim,iN,iM,2] = ((N.true[isim,iN,iM] > quantile(N_boot,0.025)) & (N.true[isim,iN,iM]<= quantile(N_boot,0.975)))
         }
-        
         # (3) FI model with Huggins-Alho in RMark - priority to first observer distance
         Dat_MARK = data.frame(Obs_data)
         Dat_MARK$ch = paste0(as.character(Dat_MARK$det1),as.character(Dat_MARK$det2))

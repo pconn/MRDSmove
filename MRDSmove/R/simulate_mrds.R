@@ -15,7 +15,7 @@ simulate_mrds <- function(n_species,n_bins,n_obs_bins,measure_par=0.6,move_par=c
   if(is.null(seed)==FALSE)set.seed(seed)
   expit<-function(x)1/(1+exp(-x))
   logit<-function(x)log(x/(1-x))
-  N<-round(runif(n_species,1499.5,1500.5))
+  N<-round(runif(n_species,999.5,1000.5))
   
   ###  model for detection probability
   beta_p_0 = 1

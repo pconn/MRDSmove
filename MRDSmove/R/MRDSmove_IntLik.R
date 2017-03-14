@@ -12,12 +12,13 @@
 #' @param Bin.widths Vector of distance bin widths
 #' @param Obs.bins A vector giving which bins are observed (e.g. 1:3 if bins 1-3 are observed)
 #' @param Move.fix A indicator vector giving which movement/measurement error parameters to fix to 0 (omit if all are estimated)
-#' @param gaussian If TRUE, uses a Gaussian distribution for measurement error and a half-normal for movement; if FALSE (default), uses exponential / half exponential (Laplace dist)
+#' @param gaussian.move If TRUE, uses two half-normals for movement; if FALSE (default), uses exponential / half exponential (Laplace dist)
+#' @param gaussian.meas If TRUE, uses normal distribution for measurement error; if FALSE (default), uses double exponential (Laplace dist)
 #' @return Negative log-likelihood function
 #' @export
 #' @keywords simulation, mrds
 #' @author Paul B. Conn
-MRDSmove_IntLik <- function(Par,Data,mod.formula,Bin.widths,Obs.bins,Move.fix=NULL,gaussian=FALSE){
+MRDSmove_IntLik <- function(Par,Data,mod.formula,Bin.widths,Obs.bins,Move.fix=NULL,gaussian.move=FALSE,gaussian.meas=FALSE){
   Cur.par = Par
   n.par = length(Par)
   if(is.null(Move.fix)==FALSE | sum(Move.fix)>0){
@@ -26,6 +27,9 @@ MRDSmove_IntLik <- function(Par,Data,mod.formula,Bin.widths,Obs.bins,Move.fix=NU
     Which.est = which(Est.ind==1)
     Cur.par=rep(-3,n.par+sum(Move.fix))
     Cur.par[Which.est]=Par
+    if(Cur.par[length(Cur.par)]==-3 & gaussian.meas==FALSE)Cur.par[length(Cur.par)]=3  #large value of this parameter equates to no measurement error
+    if(Cur.par[length(Cur.par)-1]==-3 & gaussian.move==FALSE)Cur.par[length(Cur.par)-1]=3
+    if(Cur.par[length(Cur.par)-2]==-3 & gaussian.move==FALSE)Cur.par[length(Cur.par)-2]=3
   }
   Temp=Bin.midpoints=0*Bin.widths
   n.bins = length(Bin.widths)
@@ -57,19 +61,19 @@ MRDSmove_IntLik <- function(Par,Data,mod.formula,Bin.widths,Obs.bins,Move.fix=NU
   
   #parameterize Psi transition matrix, Measurement error matrix
   Psi = Meas = matrix(0,n.bins,n.bins)
-  if(gaussian==TRUE){
-    for(ibin1 in 1:n.bins){
-      Psi[ibin1,ibin1:n.bins]=dnorm(Bin.midpoints[ibin1:n.bins],Bin.midpoints[ibin1],exp(Cur.par[n.par-1]))+0.00001
-      Meas[ibin1,] = dnorm(Bin.midpoints,Bin.midpoints[ibin1],exp(Cur.par[n.par]))+0.00001
-    }
-    for(ibin1 in 2:n.bins)Psi[ibin1,1:(ibin1-1)]=dnorm(Bin.midpoints[1:(ibin1-1)],Bin.midpoints[ibin1],exp(Cur.par[n.par-2]))
+  if(gaussian.move==TRUE){
+    for(ibin1 in 1:n.bins)Psi[ibin1,ibin1:n.bins]=dnorm(Bin.midpoints[ibin1:n.bins],Bin.midpoints[ibin1],exp(Cur.par[n.par-1]))+0.0000001
+    for(ibin1 in 2:n.bins)Psi[ibin1,1:(ibin1-1)]=dnorm(Bin.midpoints[1:(ibin1-1)],Bin.midpoints[ibin1],exp(Cur.par[n.par-2]))+0.0000001
   }
-  if(gaussian==FALSE){  #double exponential
-    for(ibin1 in 1:n.bins){
-      Psi[ibin1,ibin1:n.bins]=dexp(Bin.midpoints[ibin1:n.bins]-Bin.midpoints[ibin1],exp(Cur.par[n.par-1]))+0.00001
-      Meas[ibin1,] = dexp(abs(Bin.midpoints-Bin.midpoints[ibin1]),exp(Cur.par[n.par]))+0.00001
-    }
-    for(ibin1 in 2:n.bins)Psi[ibin1,1:(ibin1-1)]=dexp(Bin.midpoints[ibin1]-Bin.midpoints[1:(ibin1-1)],exp(Cur.par[n.par-2]))
+  if(gaussian.move==FALSE){  #double exponential
+    for(ibin1 in 1:n.bins)Psi[ibin1,ibin1:n.bins]=dexp(Bin.midpoints[ibin1:n.bins]-Bin.midpoints[ibin1],exp(Cur.par[n.par-1]))+0.0000001
+    for(ibin1 in 2:n.bins)Psi[ibin1,1:(ibin1-1)]=dexp(Bin.midpoints[ibin1]-Bin.midpoints[1:(ibin1-1)],exp(Cur.par[n.par-2]))+0.0000001
+  }
+  if(gaussian.meas==TRUE){
+    for(ibin1 in 1:n.bins)Meas[ibin1,] = dnorm(Bin.midpoints,Bin.midpoints[ibin1],exp(Cur.par[n.par]))+0.0000001
+  }
+  if(gaussian.meas==FALSE){
+    for(ibin1 in 1:n.bins)Meas[ibin1,] = dexp(abs(Bin.midpoints-Bin.midpoints[ibin1]),exp(Cur.par[n.par]))+0.0000001
   }
   Psi = Psi/rowSums(Psi)
   Psi.nomove = diag(n.bins)

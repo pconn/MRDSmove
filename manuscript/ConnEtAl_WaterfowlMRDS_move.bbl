@@ -1,9 +1,18 @@
 \begin{thebibliography}{xx}
 
+\harvarditem{Alho}{1990}{Alho1990}
+Alho, J.~M.  \harvardyearleft 1990\harvardyearright , ``Logistic regression in
+  capture-recapture models,'' {\em Biometrics}, 46,~623--635.
+
 \harvarditem{Alisauskas \harvardand\ Conn}{2017}{AlisauskasConn2017}
 Alisauskas, R.~T., \harvardand\ Conn, P.~B.  \harvardyearleft
   2017\harvardyearright , ``Evaluating detectability of Arctic waterfowl
   populations in double-observer helicopter surveys,'' , .
+
+\harvarditem{Borchers \harvardand\ Efford}{2008}{BorchersEfford2008}
+Borchers, D.~L., \harvardand\ Efford, M.~G.  \harvardyearleft
+  2008\harvardyearright , ``Spatially explicit maximum likelihood methods for
+  capture--recapture studies,'' {\em Biometrics}, 64(2),~377--385.
 
 \harvarditem[Borchers et~al.]{Borchers, Laake, Southwell \harvardand\
   Paxton}{2006}{BorchersEtAl2006}
@@ -11,6 +20,12 @@ Borchers, D.~L., Laake, J.~L., Southwell, C., \harvardand\ Paxton, C. G.~M.
   \harvardyearleft 2006\harvardyearright , ``Accomodating unmodeled
   heterogeneity in double-observer distance sampling surveys,'' {\em
   Biometrics}, 62,~372--378.
+
+\harvarditem{Borchers \harvardand\ Marques}{2017}{BorchersMarques2017}
+Borchers, D.~L., \harvardand\ Marques, T.~A.  \harvardyearleft
+  2017\harvardyearright , ``From distance sampling to spatial
+  capture-recapture,'' {\em AStA Advances in Statistical Analysis},
+  doi:10.1007/s10182-016-0287-7.
 
 \harvarditem[Borchers et~al.]{Borchers, Stevenson, Kidney, Thomas \harvardand\
   Marques}{2015}{BorchersEtAl2015}
@@ -40,6 +55,12 @@ Buckland, S.~T., Anderson, D.~R., Burnham, K.~P., Laake, J.~L., Borchers,
   Introduction to Distance Sampling: Estimating the abundance of biological
   populations}, Oxford, U.K.: Oxford University Press.
 
+\harvarditem[Buckland et~al.]{Buckland, Anderson, Burnham, Laake, Borchers
+  \harvardand\ Thomas}{2004}{BucklandEtAl2004}
+Buckland, S.~T., Anderson, D.~R., Burnham, K.~P., Laake, J.~L., Borchers,
+  D.~L., \harvardand\ Thomas, L.  \harvardyearleft 2004\harvardyearright , {\em
+  Advanced Distance Sampling} Oxford University Press.
+
 \harvarditem[Buckland et~al.]{Buckland, Laake \harvardand\
   Borchers}{2010}{BucklandEtAl2010}
 Buckland, S.~T., Laake, J.~L., \harvardand\ Borchers, D.~L.  \harvardyearleft
@@ -52,6 +73,12 @@ Burnham, K.~P., Anderson, D.~R., \harvardand\ Laake, J.~L.  \harvardyearleft
   1980\harvardyearright , ``Estimation of density for line transect sampling of
   biological populations,'' {\em Wildlife Monographs}, 72,~7--202.
 
+\harvarditem[Burnham et~al.]{Burnham, Buckland, Laake, Borchers, Marques,
+  Bishop \harvardand\ Thomas}{2004}{BurnhamEtAl2004}
+Burnham, K.~P., Buckland, S.~T., Laake, J.~L., Borchers, D.~L., Marques, T.~A.,
+  Bishop, J. R.~B., \harvardand\ Thomas, L.  \harvardyearleft
+  2004\harvardyearright , ``Further topics in distance sampling,''.
+
 \harvarditem[Burt et~al.]{Burt, Borchers, Jenkins \harvardand\
   Marques}{2014}{BurtEtAl2014}
 Burt, M.~L., Borchers, D.~L., Jenkins, K.~J., \harvardand\ Marques, T.~A.
@@ -59,11 +86,41 @@ Burt, M.~L., Borchers, D.~L., Jenkins, K.~J., \harvardand\ Marques, T.~A.
   sampling methods on line transect surveys,'' {\em Methods in Ecology and
   Evolution}, 5(11),~1180--1191.
 
+\harvarditem[Conn et~al.]{Conn, Laake \harvardand\ Johnson}{2012}{ConnEtAl2012}
+Conn, P.~B., Laake, J.~L., \harvardand\ Johnson, D.~S.  \harvardyearleft
+  2012\harvardyearright , ``A hierarchical modeling framework for multiple
+  observer transect surveys,'' {\em PLoS ONE}, 7,~e42294.
+
+\harvarditem[Conn et~al.]{Conn, Ver~Hoef, McClintock, Moreland, London,
+  Cameron, Dahle \harvardand\ Boveng}{2014}{ConnEtAl2014}
+Conn, P.~B., Ver~Hoef, J.~M., McClintock, B.~T., Moreland, E.~E., London,
+  J.~M., Cameron, M.~F., Dahle, S.~P., \harvardand\ Boveng, P.~L.
+  \harvardyearleft 2014\harvardyearright , ``Estimating multi-species abundance
+  using automated detection systems: ice-associated seals in the eastern
+  {B}ering {S}ea,'' {\em Methods in Ecology and Evolution}, 5,~1280--1293.
+
+\harvarditem[Gelman et~al.]{Gelman, Carlin, Stern \harvardand\
+  Rubin}{2014}{GelmanEtAl2014}
+Gelman, A., Carlin, J.~B., Stern, H.~S., \harvardand\ Rubin, D.~B.
+  \harvardyearleft 2014\harvardyearright , {\em Bayesian data analysis, Third
+  edition} Taylor \& Francis.
+
 \harvarditem[Glennie et~al.]{Glennie, Buckland \harvardand\
   Thomas}{2015}{GlennieEtAl2015}
 Glennie, R., Buckland, S.~T., \harvardand\ Thomas, L.  \harvardyearleft
   2015\harvardyearright , ``The effect of animal movement on line transect
   estimates of abundance,'' {\em PloS one}, 10(3),~e0121333.
+
+\harvarditem{Huggins}{1989}{Huggins1989}
+Huggins, R.~M.  \harvardyearleft 1989\harvardyearright , ``On the statistical
+  analysis of capture-recapture experiments,'' {\em Biometrika}, 76,~133--140.
+
+\harvarditem{Laake}{2013}{Laake2013}
+Laake, J.~L.  \harvardyearleft 2013\harvardyearright , {RMark}: An R Interface
+  for Analysis of Capture-Recapture Data with {MARK},, {AFSC} Processed Rep.
+  2013-01, Alaska Fish. Sci. Cent., {NOAA}, Natl. Mar. Fish. Serv., Seattle,
+  {WA}.
+\newline\harvardurl{http://www.afsc.noaa.gov/Publications/ProcRpt/PR2013-01.pdf}
 
 \harvarditem{Laake \harvardand\ Borchers}{2004}{LaakeBorchers2004}
 Laake, J.~L., \harvardand\ Borchers, D.~L.  \harvardyearleft
@@ -71,5 +128,44 @@ Laake, J.~L., \harvardand\ Borchers, D.~L.  \harvardyearleft
   zero,'' in {\em Advanced Distance Sampling}, eds. S.~Buckland, D.~Anderson,
   K.~Burnham, J.~Laake, D.~Borchers, \harvardand\ L.~Thomas, Oxford, U.K.:
   Oxford University Press, pp.~108--189.
+
+\harvarditem{Mac{K}enzie \harvardand\ Clement}{2016}{MacKenzieClement2016}
+Mac{K}enzie, D.~I., \harvardand\ Clement, D.  \harvardyearleft
+  2016\harvardyearright , ``Accounting for Lack of Independence and Partial
+  Overlap of Observation Zones in Line-Transect Mark-Recapture Distance
+  Sampling,'' {\em Journal of Agricultural, Biological, and Environmental
+  Statistics}, 21(1),~41--57.
+
+\harvarditem[Miller et~al.]{Miller, Burt, Rexstad \harvardand\
+  Thomas}{2013}{MillerEtAl2013}
+Miller, D.~L., Burt, M.~L., Rexstad, E.~A., \harvardand\ Thomas, L.
+  \harvardyearleft 2013\harvardyearright , ``Spatial models for distance
+  sampling data: recent developments and future directions,'' {\em Methods in
+  Ecology and Evolution}, 4,~1001--1010.
+
+\harvarditem{{R Development Core Team}}{2016}{RTeam2016}
+{R Development Core Team}  \harvardyearleft 2016\harvardyearright , {\em R: A
+  Language and Environment for Statistical Computing}, R Foundation for
+  Statistical Computing, Vienna, Austria.
+\newblock {ISBN} 3-900051-07-0.
+\newline\harvardurl{http://www.R-project.org}
+
+\harvarditem[Royle et~al.]{Royle, Chandler, Sollmann \harvardand\
+  Gardner}{2013}{RoyleEtAl2013book}
+Royle, J.~A., Chandler, R.~B., Sollmann, R., \harvardand\ Gardner, B.
+  \harvardyearleft 2013\harvardyearright , {\em Spatial capture-recapture}
+  Academic Press.
+
+\harvarditem[Royle et~al.]{Royle, Dorazio \harvardand\
+  Link}{2007}{RoyleEtAl2007b}
+Royle, J., Dorazio, R., \harvardand\ Link, W.  \harvardyearleft
+  2007\harvardyearright , ``Analysis of multinomial models with unknown index
+  using data augmentation,'' {\em Journal of Computational and Graphical
+  Statistics}, 16,~1--19.
+
+\harvarditem{White \harvardand\ Burnham}{1999}{WhiteBurnham1999}
+White, G.~C., \harvardand\ Burnham, K.~P.  \harvardyearleft
+  1999\harvardyearright , ``Program MARK: Survival estimation from populations
+  of marked animals,'' {\em Bird Study}, 46 Supplement,~120--138.
 
 \end{thebibliography}
