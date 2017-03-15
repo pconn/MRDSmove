@@ -1,5 +1,9 @@
 
-Data=read.csv('QMG 2014 Detections Distance Double-observer.csv')
+### analyze Canada waterfowl data for the Alisauskas and Conn Euring paper - note this does not use the movement
+# and measurement error model
+
+data(waterfowl)
+Data=waterfowl
 
 Delta_measure=-(Data$DISTFRONT[which(Data$groupFLY==0)]-Data$DISTBACK[which(Data$groupFLY==0)])
 Delta_move = -(Data$DISTFRONT[which(Data$groupFLY==1)]-Data$DISTBACK[which(Data$groupFLY==1)])

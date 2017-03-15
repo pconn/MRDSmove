@@ -1,19 +1,11 @@
 #  run simulation study examining performance of integrated likelihood approach for modeling
 # movement and measurement error in MRDS surveys with binned distances
+library('MRDSmove')
 library('RMark')
 library('mvtnorm')
 #library('numDeriv')
 n.obs.bins=5
 
-setwd('c:/users/paul.conn/git/alisauskas')
-
-source('./MRDSmove/R/simulate_mrds_hn.R')
-source('./MRDSmove/R/MRDSmove_IntLik.R')
-source('./MRDSmove/R/MRDSmove_IntLik_ObsDep.R')
-source('./MRDSmove/R/ht_mrds_ObsDep.R')
-source('./MRDSmove/R/ht_mrds.R')
-
-setwd('c:/users/paul.conn/git/alisauskas/output')
 
 expit<-function(x)1/(1+exp(-x))
 n.sims = 500

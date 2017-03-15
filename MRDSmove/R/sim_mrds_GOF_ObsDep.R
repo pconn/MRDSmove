@@ -1,5 +1,5 @@
 
-#   function to simulate MRDS data w/ movement and measurement error from model estimates.  Note: not set up to deal with counts>1
+#' function to simulate MRDS data w/ movement and measurement error from model estimates.  Note: not set up to deal with counts>1
 #' @param Par Parameter vector, including detection parameters, movement error SDs (left and right tail), measurement error SD
 #' @param Data A design.matrix with the following column names: "match" indicates which records match with which (there should be two records
 #'        for each detection, one for each observer), "observer","species" (provides species or other grouping variable: abundance estimates will be provided separately for each), 

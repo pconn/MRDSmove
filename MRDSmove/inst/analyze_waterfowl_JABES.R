@@ -1,14 +1,17 @@
 
 #analyze waterfowl data using movement & measurement error models, HA models
+library(MRDSmove)
 library(mvtnorm)
 library(RMark)
-source('./MRDSmove/R/MRDSmove_IntLik.R')
-source('./MRDSmove/R/MRDSmove_IntLik_ObsDep.R')
-source('./MRDSmove/R/ht_mrds_ObsDep.R')
-source('./MRDSmove/R/ht_mrds.R')
-source('./MRDSmove/R/sim_mrds_GOF.R')
+#source('./MRDSmove/R/MRDSmove_IntLik.R')
+#source('./MRDSmove/R/MRDSmove_IntLik_ObsDep.R')
+#source('./MRDSmove/R/ht_mrds_ObsDep.R')
+#source('./MRDSmove/R/ht_mrds.R')
+#source('./MRDSmove/R/sim_mrds_GOF.R')
 
-Data=read.csv('QMG 2014 Detections Distance Double-observer.csv')
+#Data=read.csv('QMG 2014 Detections Distance Double-observer.csv')
+data(waterfowl)
+Data=waterfowl
 Data$Species=as.character(Data$Species)
 Sp.list = c("CAGO","KIEI","NOPI","ROPT","WFGO","LTDU","SACR")
 Data=Data[Data$Species%in%Sp.list,]

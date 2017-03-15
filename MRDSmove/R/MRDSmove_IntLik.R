@@ -1,5 +1,5 @@
 #' Negative log likelihood function for MRDS double observer data subject to movement and measurement error
-#' @param Parameter vector, including detection parameters, movement error SDs (left and right tail), measurement error SD
+#' @param Par Parameter vector, including detection parameters, movement error SDs (left and right tail), measurement error SD
 #' @param Data A design.matrix with the following column names: "match" indicates which records match with which (there should be two records
 #'        for each detection, one for each observer), "observer","species" (provides species or other grouping variable: abundance estimates will be provided separately for each), 
 #'       "obs.dist" (observed distance; NA if missing), "g_size" (group/cluster size), "moving" (binary indicator for moving/not moving), 

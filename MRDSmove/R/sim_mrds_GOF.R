@@ -1,4 +1,4 @@
-#Utility function to randomly sample a single cell of a matrix when entries of the matrix are probability of selection
+#' Utility function to randomly sample a single cell of a matrix when entries of the matrix are probability of selection
 #' @param pmatrix Matrix of probabilities 
 #' @return A row and column entry 
 #' @export
@@ -10,8 +10,9 @@ mat_sample <- function(pmatrix){
   c(srow,scol)
 }
 
-#Utility function to get a detection history given a multinomial cell 
-#' @param pmatrix Matrix of probabilities 
+#' Utility function to get a detection history given a multinomial cell 
+#' @param cur.bin Multinomial cell bin number (1:(n.obs.bins^2+2*n.obs.bins)) 
+#' @param n.obs.bins Number of observable distance bins (n_S in paper)
 #' @return A row and column entry 
 #' @export
 #' @author Paul B. Conn
@@ -24,8 +25,9 @@ get_detection<-function(cur.bin,n.obs.bins){
   cur.det        
 }
 
-#Utility function to get observed distance bins given a multinomial cell 
-#' @param pmatrix Matrix of probabilities 
+#' Utility function to get observed distance bins given a multinomial cell 
+#' @param cur.bin Multinomial cell bin number (1:(n.obs.bins^2+2*n.obs.bins)) 
+#' @param n.obs.bins Number of observable distance bins (n_S in paper)
 #' @return A row and column entry 
 #' @export
 #' @author Paul B. Conn
@@ -42,7 +44,7 @@ get_distance<-function(cur.bin,n.obs.bins){
 }
 
 
-#   function to simulate MRDS data w/ movement and measurement error from model estimates.  Note: not set up to deal with counts>1
+#' function to simulate MRDS data w/ movement and measurement error from model estimates.  Note: not set up to deal with counts>1
 #' @param Par Parameter vector, including detection parameters, movement error SDs (left and right tail), measurement error SD
 #' @param Data A design.matrix with the following column names: "match" indicates which records match with which (there should be two records
 #'        for each detection, one for each observer), "observer","species" (provides species or other grouping variable: abundance estimates will be provided separately for each), 
