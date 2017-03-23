@@ -406,10 +406,12 @@ for(imove in 1:2){
 
 
 Quantile = array(0,dim=c(2,2,5,2))
+Mean = array(0,dim=c(2,2,5))
 for(imove in 1:2){
   for(iobs in 1:2){
     for(ibin in 1:5){
       Quantile[imove,iobs,ibin,]=quantile(Dist.total[imove,iobs,ibin,],c(0.025,0.975))
+      Mean[imove,iobs,ibin] = mean(Dist.total[imove,iobs,ibin,])
     }
   }
 }
@@ -417,8 +419,16 @@ for(imove in 1:2){
 Plot_df = data.frame(Count=as.vector(Quantile),Move=rep(c("Not moving","Moving"),2*5*2),
                      Observer=rep(c("Observer 1","Observer 1","Observer 2","Observer 2"),5*2),Distance=rep(rep(c(1:5),each=4),2),
                      Quantity=rep(c("SimQuantileLower","SimQuantileUpper"),each=20))
+Plot_df_mean = data.frame(Count=as.vector(Mean),Move=rep(c("Not moving","Moving"),2*5),
+                     Observer=rep(c("Observer 1","Observer 1","Observer 2","Observer 2"),5),Distance=rep(rep(c(1:5),each=4)),
+                     Quantity="Mean")
+
+
 library(ggplot2)
 GOF_plot1 = ggplot(Plot_df)+geom_line(aes(x=Distance,y=Count,group=Quantity),linetype=2)+facet_grid(Move~Observer)
+
+GOF_plot1 = GOF_plot1 + geom_line(data=Plot_df_mean,linetype=2,aes(x=Distance,y=Count),size=1.2)+theme_grey(base_size=16)
+
 
 Plot_df2=data.frame(Count=as.vector(Obs.total),Move=rep(c("Not moving","Moving"),2*5),
                     Observer=rep(c("Observer 1","Observer 1","Observer 2","Observer 2"),5),Distance=rep(c(1:5),each=4),
@@ -460,7 +470,7 @@ Measure=Measure/sum(Measure)
 Plot_df = data.frame(Distance=rep(c(-4:4),2),Kernel=rep(c("Movement","Measure"),each=9),Probability=c(Movement[2:10],Measure[2:10]))
 
 library(ggplot2)
-kernel_plot = ggplot(Plot_df)+geom_line(aes(x=Distance,y=Probability,lty=Kernel),size=1.2)+theme_gray(base_size=16)
+kernel_plot = ggplot(Plot_df)+geom_line(aes(x=Distance,y=Probability,lty=Kernel),size=1.2)+theme_gray(base_size=16)+xlab(expression(paste("Distance bin discrepancy (",delta,")")))
 
 pdf("Kernel_plot.pdf")
  kernel_plot
