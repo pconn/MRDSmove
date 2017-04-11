@@ -1,171 +1,424 @@
-\begin{thebibliography}{xx}
+\begin{thebibliography}{30}
+% BibTex style file: imsart-nameyear.bst, 2013-01-28
+% Default style options (sort=1,type=nameyear).
+% Used options (sort=1,type=nameyear).
 
-\harvarditem{Alho}{1990}{Alho1990}
-Alho, J.~M.  \harvardyearleft 1990\harvardyearright , ``Logistic regression in
-  capture-recapture models,'' {\em Biometrics}, 46,~623--635.
+\bibitem[\protect\citeauthoryear{Alho}{1990}]{Alho1990}
+\begin{barticle}[author]
+\bauthor{\bsnm{Alho},~\bfnm{J.~M.}\binits{J.~M.}}
+(\byear{1990}).
+\btitle{Logistic regression in capture-recapture models}.
+\bjournal{Biometrics}
+\bvolume{46}
+\bpages{623--635}.
+\end{barticle}
+\endbibitem
 
-\harvarditem{Alisauskas \harvardand\ Conn}{2017}{AlisauskasConn2017}
-Alisauskas, R.~T., \harvardand\ Conn, P.~B.  \harvardyearleft
-  2017\harvardyearright , ``Evaluating detectability of Arctic waterfowl
-  populations in double-observer helicopter surveys,'' , .
+\bibitem[\protect\citeauthoryear{Alisauskas and
+  Conn}{2017}]{AlisauskasConn2017}
+\begin{barticle}[author]
+\bauthor{\bsnm{Alisauskas},~\bfnm{R.~T.}\binits{R.~T.}} \AND
+  \bauthor{\bsnm{Conn},~\bfnm{P.~B.}\binits{P.~B.}}
+(\byear{2017}).
+\btitle{Evaluating detectability of Arctic waterfowl populations in
+  double-observer helicopter surveys}.
+\bjournal{To be submitted to the Euring 2017 Proceedings}.
+\end{barticle}
+\endbibitem
 
-\harvarditem{Borchers \harvardand\ Efford}{2008}{BorchersEfford2008}
-Borchers, D.~L., \harvardand\ Efford, M.~G.  \harvardyearleft
-  2008\harvardyearright , ``Spatially explicit maximum likelihood methods for
-  capture--recapture studies,'' {\em Biometrics}, 64(2),~377--385.
+\bibitem[\protect\citeauthoryear{Borchers and
+  Efford}{2008}]{BorchersEfford2008}
+\begin{barticle}[author]
+\bauthor{\bsnm{Borchers},~\bfnm{David~L}\binits{D.~L.}} \AND
+  \bauthor{\bsnm{Efford},~\bfnm{M.~G.}\binits{M.~G.}}
+(\byear{2008}).
+\btitle{Spatially explicit maximum likelihood methods for capture--recapture
+  studies}.
+\bjournal{Biometrics}
+\bvolume{64}
+\bpages{377--385}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Borchers et~al.]{Borchers, Laake, Southwell \harvardand\
-  Paxton}{2006}{BorchersEtAl2006}
-Borchers, D.~L., Laake, J.~L., Southwell, C., \harvardand\ Paxton, C. G.~M.
-  \harvardyearleft 2006\harvardyearright , ``Accomodating unmodeled
-  heterogeneity in double-observer distance sampling surveys,'' {\em
-  Biometrics}, 62,~372--378.
+\bibitem[\protect\citeauthoryear{Borchers and
+  Marques}{2017}]{BorchersMarques2017}
+\begin{barticle}[author]
+\bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}} \AND
+  \bauthor{\bsnm{Marques},~\bfnm{T.~A.}\binits{T.~A.}}
+(\byear{2017}).
+\btitle{From distance sampling to spatial capture-recapture}.
+\bjournal{AStA Advances in Statistical Analysis}
+\bvolume{doi:10.1007/s10182-016-0287-7}.
+\end{barticle}
+\endbibitem
 
-\harvarditem{Borchers \harvardand\ Marques}{2017}{BorchersMarques2017}
-Borchers, D.~L., \harvardand\ Marques, T.~A.  \harvardyearleft
-  2017\harvardyearright , ``From distance sampling to spatial
-  capture-recapture,'' {\em AStA Advances in Statistical Analysis},
-  doi:10.1007/s10182-016-0287-7.
+\bibitem[\protect\citeauthoryear{Borchers, Zucchini and
+  Fewster}{1998}]{BorchersEtAl1998}
+\begin{barticle}[author]
+\bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}},
+  \bauthor{\bsnm{Zucchini},~\bfnm{W.}\binits{W.}} \AND
+  \bauthor{\bsnm{Fewster},~\bfnm{R.~M.}\binits{R.~M.}}
+(\byear{1998}).
+\btitle{Mark-recapture models for line transect surveys}.
+\bjournal{Biometrics}
+\bvolume{54}
+\bpages{1207-1220}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Borchers et~al.]{Borchers, Stevenson, Kidney, Thomas \harvardand\
-  Marques}{2015}{BorchersEtAl2015}
-Borchers, D.~L., Stevenson, B.~C., Kidney, D., Thomas, L., \harvardand\
-  Marques, T.~A.  \harvardyearleft 2015\harvardyearright , ``A unifying model
-  for capture--recapture and distance sampling surveys of wildlife
-  populations,'' {\em Journal of the American Statistical Association},
-  110(509),~195--204.
+\bibitem[\protect\citeauthoryear{Borchers et~al.}{2006}]{BorchersEtAl2006}
+\begin{barticle}[author]
+\bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}},
+  \bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}},
+  \bauthor{\bsnm{Southwell},~\bfnm{C.}\binits{C.}} \AND
+  \bauthor{\bsnm{Paxton},~\bfnm{C.~G.~M.}\binits{C.~G.~M.}}
+(\byear{2006}).
+\btitle{Accomodating unmodeled heterogeneity in double-observer distance
+  sampling surveys}.
+\bjournal{Biometrics}
+\bvolume{62}
+\bpages{372-378}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Borchers et~al.]{Borchers, Zucchini \harvardand\
-  Fewster}{1998}{BorchersEtAl1998}
-Borchers, D.~L., Zucchini, W., \harvardand\ Fewster, R.~M.  \harvardyearleft
-  1998\harvardyearright , ``Mark-recapture models for line transect surveys,''
-  {\em Biometrics}, 54,~1207--1220.
+\bibitem[\protect\citeauthoryear{Borchers et~al.}{2010}]{BorchersEtAl2010}
+\begin{barticle}[author]
+\bauthor{\bsnm{Borchers},~\bfnm{David}\binits{D.}},
+  \bauthor{\bsnm{Marques},~\bfnm{Tiago}\binits{T.}},
+  \bauthor{\bsnm{Gunnlaugsson},~\bfnm{Thorvaldur}\binits{T.}} \AND
+  \bauthor{\bsnm{Jupp},~\bfnm{Peter}\binits{P.}}
+(\byear{2010}).
+\btitle{Estimating distance sampling detection functions when distances are
+  measured with errors}.
+\bjournal{Journal of Agricultural, Biological, and Environmental Statistics}
+\bvolume{15}
+\bpages{346--361}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Borchers et~al.]{Borchers, Marques, Gunnlaugsson \harvardand\
-  Jupp}{2010}{BorchersEtAl2010}
-Borchers, D., Marques, T., Gunnlaugsson, T., \harvardand\ Jupp, P.
-  \harvardyearleft 2010\harvardyearright , ``Estimating distance sampling
-  detection functions when distances are measured with errors,'' {\em Journal
-  of Agricultural, Biological, and Environmental Statistics}, 15(3),~346--361.
+\bibitem[\protect\citeauthoryear{Borchers et~al.}{2015}]{BorchersEtAl2015}
+\begin{barticle}[author]
+\bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}},
+  \bauthor{\bsnm{Stevenson},~\bfnm{B.~C.}\binits{B.~C.}},
+  \bauthor{\bsnm{Kidney},~\bfnm{D.}\binits{D.}},
+  \bauthor{\bsnm{Thomas},~\bfnm{L.}\binits{L.}} \AND
+  \bauthor{\bsnm{Marques},~\bfnm{T.~A.}\binits{T.~A.}}
+(\byear{2015}).
+\btitle{A unifying model for capture--recapture and distance sampling surveys
+  of wildlife populations}.
+\bjournal{Journal of the American Statistical Association}
+\bvolume{110}
+\bpages{195--204}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Buckland et~al.]{Buckland, Anderson, Burnham, Laake, Borchers
-  \harvardand\ Thomas}{2001}{BucklandEtAl2001}
-Buckland, S.~T., Anderson, D.~R., Burnham, K.~P., Laake, J.~L., Borchers,
-  D.~L., \harvardand\ Thomas, L.  \harvardyearleft 2001\harvardyearright , {\em
-  Introduction to Distance Sampling: Estimating the abundance of biological
-  populations}, Oxford, U.K.: Oxford University Press.
+\bibitem[\protect\citeauthoryear{Buckland, Laake and
+  Borchers}{2010}]{BucklandEtAl2010}
+\begin{barticle}[author]
+\bauthor{\bsnm{Buckland},~\bfnm{S.~T.}\binits{S.~T.}},
+  \bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}} \AND
+  \bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}}
+(\byear{2010}).
+\btitle{Double-observer line transect methods: Levels of independence}.
+\bjournal{Biometrics}
+\bvolume{66}
+\bpages{169-177}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Buckland et~al.]{Buckland, Anderson, Burnham, Laake, Borchers
-  \harvardand\ Thomas}{2004}{BucklandEtAl2004}
-Buckland, S.~T., Anderson, D.~R., Burnham, K.~P., Laake, J.~L., Borchers,
-  D.~L., \harvardand\ Thomas, L.  \harvardyearleft 2004\harvardyearright , {\em
-  Advanced Distance Sampling} Oxford University Press.
+\bibitem[\protect\citeauthoryear{Buckland and
+  Turnock}{1992}]{BucklandTurnock1992}
+\begin{barticle}[author]
+\bauthor{\bsnm{Buckland},~\bfnm{Stephen~T}\binits{S.~T.}} \AND
+  \bauthor{\bsnm{Turnock},~\bfnm{Benjamin~J}\binits{B.~J.}}
+(\byear{1992}).
+\btitle{A robust line transect method}.
+\bjournal{Biometrics}
+\bpages{901--909}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Buckland et~al.]{Buckland, Laake \harvardand\
-  Borchers}{2010}{BucklandEtAl2010}
-Buckland, S.~T., Laake, J.~L., \harvardand\ Borchers, D.~L.  \harvardyearleft
-  2010\harvardyearright , ``Double-observer line transect methods: Levels of
-  independence,'' {\em Biometrics}, 66,~169--177.
+\bibitem[\protect\citeauthoryear{Buckland et~al.}{2001}]{BucklandEtAl2001}
+\begin{bbook}[author]
+\bauthor{\bsnm{Buckland},~\bfnm{S.~T.}\binits{S.~T.}},
+  \bauthor{\bsnm{Anderson},~\bfnm{D.~R.}\binits{D.~R.}},
+  \bauthor{\bsnm{Burnham},~\bfnm{K.~P.}\binits{K.~P.}},
+  \bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}},
+  \bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}} \AND
+  \bauthor{\bsnm{Thomas},~\bfnm{L.}\binits{L.}}
+(\byear{2001}).
+\btitle{Introduction to Distance Sampling: Estimating the abundance of
+  biological populations}.
+\bpublisher{Oxford University Press}, \baddress{Oxford, U.K.}
+\end{bbook}
+\endbibitem
 
-\harvarditem[Burnham et~al.]{Burnham, Anderson \harvardand\
-  Laake}{1980}{BurnhamEtAl1980}
-Burnham, K.~P., Anderson, D.~R., \harvardand\ Laake, J.~L.  \harvardyearleft
-  1980\harvardyearright , ``Estimation of density for line transect sampling of
-  biological populations,'' {\em Wildlife Monographs}, 72,~7--202.
+\bibitem[\protect\citeauthoryear{Buckland et~al.}{2004}]{BucklandEtAl2004}
+\begin{bbook}[author]
+\bauthor{\bsnm{Buckland},~\bfnm{S.~T.}\binits{S.~T.}},
+  \bauthor{\bsnm{Anderson},~\bfnm{D.~R.}\binits{D.~R.}},
+  \bauthor{\bsnm{Burnham},~\bfnm{K.~P.}\binits{K.~P.}},
+  \bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}},
+  \bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}} \AND
+  \bauthor{\bsnm{Thomas},~\bfnm{L.}\binits{L.}}
+(\byear{2004}).
+\btitle{Advanced Distance Sampling}.
+\bpublisher{Oxford University Press}.
+\end{bbook}
+\endbibitem
 
-\harvarditem[Burnham et~al.]{Burnham, Buckland, Laake, Borchers, Marques,
-  Bishop \harvardand\ Thomas}{2004}{BurnhamEtAl2004}
-Burnham, K.~P., Buckland, S.~T., Laake, J.~L., Borchers, D.~L., Marques, T.~A.,
-  Bishop, J. R.~B., \harvardand\ Thomas, L.  \harvardyearleft
-  2004\harvardyearright , ``Further topics in distance sampling,''.
+\bibitem[\protect\citeauthoryear{Burnham, Anderson and
+  Laake}{1980}]{BurnhamEtAl1980}
+\begin{barticle}[author]
+\bauthor{\bsnm{Burnham},~\bfnm{K.~P.}\binits{K.~P.}},
+  \bauthor{\bsnm{Anderson},~\bfnm{D.~R.}\binits{D.~R.}} \AND
+  \bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}}
+(\byear{1980}).
+\btitle{Estimation of density for line transect sampling of biological
+  populations}.
+\bjournal{Wildlife Monographs}
+\bvolume{72}
+\bpages{7-202}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Burt et~al.]{Burt, Borchers, Jenkins \harvardand\
-  Marques}{2014}{BurtEtAl2014}
-Burt, M.~L., Borchers, D.~L., Jenkins, K.~J., \harvardand\ Marques, T.~A.
-  \harvardyearleft 2014\harvardyearright , ``Using mark--recapture distance
-  sampling methods on line transect surveys,'' {\em Methods in Ecology and
-  Evolution}, 5(11),~1180--1191.
+\bibitem[\protect\citeauthoryear{Burnham et~al.}{2004}]{BurnhamEtAl2004}
+\begin{binbook}[author]
+\bauthor{\bsnm{Burnham},~\bfnm{K.~P.}\binits{K.~P.}},
+  \bauthor{\bsnm{Buckland},~\bfnm{S.~T.}\binits{S.~T.}},
+  \bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}},
+  \bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}},
+  \bauthor{\bsnm{Marques},~\bfnm{T.~A.}\binits{T.~A.}},
+  \bauthor{\bsnm{Bishop},~\bfnm{J.~R.~B.}\binits{J.~R.~B.}} \AND
+  \bauthor{\bsnm{Thomas},~\bfnm{L.}\binits{L.}}
+(\byear{2004}).
+\btitle{Further topics in distance sampling}
+In \bbooktitle{Advanced distance sampling}
+\bpages{307--392}.
+\bpublisher{Oxford University Press Oxford, United Kingdom}.
+\end{binbook}
+\endbibitem
 
-\harvarditem[Conn et~al.]{Conn, Laake \harvardand\ Johnson}{2012}{ConnEtAl2012}
-Conn, P.~B., Laake, J.~L., \harvardand\ Johnson, D.~S.  \harvardyearleft
-  2012\harvardyearright , ``A hierarchical modeling framework for multiple
-  observer transect surveys,'' {\em PLoS ONE}, 7,~e42294.
+\bibitem[\protect\citeauthoryear{Burt et~al.}{2014}]{BurtEtAl2014}
+\begin{barticle}[author]
+\bauthor{\bsnm{Burt},~\bfnm{Mary~Louise}\binits{M.~L.}},
+  \bauthor{\bsnm{Borchers},~\bfnm{David~L}\binits{D.~L.}},
+  \bauthor{\bsnm{Jenkins},~\bfnm{Kurt~J}\binits{K.~J.}} \AND
+  \bauthor{\bsnm{Marques},~\bfnm{Tiago~A}\binits{T.~A.}}
+(\byear{2014}).
+\btitle{Using mark--recapture distance sampling methods on line transect
+  surveys}.
+\bjournal{Methods in Ecology and Evolution}
+\bvolume{5}
+\bpages{1180--1191}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Conn et~al.]{Conn, Ver~Hoef, McClintock, Moreland, London,
-  Cameron, Dahle \harvardand\ Boveng}{2014}{ConnEtAl2014}
-Conn, P.~B., Ver~Hoef, J.~M., McClintock, B.~T., Moreland, E.~E., London,
-  J.~M., Cameron, M.~F., Dahle, S.~P., \harvardand\ Boveng, P.~L.
-  \harvardyearleft 2014\harvardyearright , ``Estimating multi-species abundance
-  using automated detection systems: ice-associated seals in the eastern
-  {B}ering {S}ea,'' {\em Methods in Ecology and Evolution}, 5,~1280--1293.
+\bibitem[\protect\citeauthoryear{Conn, Laake and Johnson}{2012}]{ConnEtAl2012}
+\begin{barticle}[author]
+\bauthor{\bsnm{Conn},~\bfnm{P.~B.}\binits{P.~B.}},
+  \bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}} \AND
+  \bauthor{\bsnm{Johnson},~\bfnm{D.~S.}\binits{D.~S.}}
+(\byear{2012}).
+\btitle{A hierarchical modeling framework for multiple observer transect
+  surveys}.
+\bjournal{PLoS ONE}
+\bvolume{7}
+\bpages{e42294}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Gelman et~al.]{Gelman, Carlin, Stern \harvardand\
-  Rubin}{2014}{GelmanEtAl2014}
-Gelman, A., Carlin, J.~B., Stern, H.~S., \harvardand\ Rubin, D.~B.
-  \harvardyearleft 2014\harvardyearright , {\em Bayesian data analysis, Third
-  edition} Taylor \& Francis.
+\bibitem[\protect\citeauthoryear{Conn et~al.}{2014}]{ConnEtAl2014}
+\begin{barticle}[author]
+\bauthor{\bsnm{Conn},~\bfnm{P.~B.}\binits{P.~B.}},
+  \bauthor{\bsnm{Ver~Hoef},~\bfnm{J.~M.}\binits{J.~M.}},
+  \bauthor{\bsnm{McClintock},~\bfnm{B.~T.}\binits{B.~T.}},
+  \bauthor{\bsnm{Moreland},~\bfnm{E.~E.}\binits{E.~E.}},
+  \bauthor{\bsnm{London},~\bfnm{J.~M.}\binits{J.~M.}},
+  \bauthor{\bsnm{Cameron},~\bfnm{M.~F.}\binits{M.~F.}},
+  \bauthor{\bsnm{Dahle},~\bfnm{S.~P.}\binits{S.~P.}} \AND
+  \bauthor{\bsnm{Boveng},~\bfnm{P.~L.}\binits{P.~L.}}
+(\byear{2014}).
+\btitle{Estimating multi-species abundance using automated detection systems:
+  ice-associated seals in the eastern {B}ering {S}ea}.
+\bjournal{Methods in Ecology and Evolution}
+\bvolume{5}
+\bpages{1280-1293}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Glennie et~al.]{Glennie, Buckland \harvardand\
-  Thomas}{2015}{GlennieEtAl2015}
-Glennie, R., Buckland, S.~T., \harvardand\ Thomas, L.  \harvardyearleft
-  2015\harvardyearright , ``The effect of animal movement on line transect
-  estimates of abundance,'' {\em PloS one}, 10(3),~e0121333.
+\bibitem[\protect\citeauthoryear{Gelman et~al.}{2014}]{GelmanEtAl2014}
+\begin{bbook}[author]
+\bauthor{\bsnm{Gelman},~\bfnm{Andrew}\binits{A.}},
+  \bauthor{\bsnm{Carlin},~\bfnm{John~B}\binits{J.~B.}},
+  \bauthor{\bsnm{Stern},~\bfnm{Hal~S}\binits{H.~S.}} \AND
+  \bauthor{\bsnm{Rubin},~\bfnm{Donald~B}\binits{D.~B.}}
+(\byear{2014}).
+\btitle{Bayesian data analysis, Third edition}.
+\bpublisher{Taylor \& Francis}.
+\end{bbook}
+\endbibitem
 
-\harvarditem{Huggins}{1989}{Huggins1989}
-Huggins, R.~M.  \harvardyearleft 1989\harvardyearright , ``On the statistical
-  analysis of capture-recapture experiments,'' {\em Biometrika}, 76,~133--140.
+\bibitem[\protect\citeauthoryear{Glennie, Buckland and
+  Thomas}{2015}]{GlennieEtAl2015}
+\begin{barticle}[author]
+\bauthor{\bsnm{Glennie},~\bfnm{Richard}\binits{R.}},
+  \bauthor{\bsnm{Buckland},~\bfnm{Stephen~T}\binits{S.~T.}} \AND
+  \bauthor{\bsnm{Thomas},~\bfnm{Len}\binits{L.}}
+(\byear{2015}).
+\btitle{The effect of animal movement on line transect estimates of abundance}.
+\bjournal{PloS one}
+\bvolume{10}
+\bpages{e0121333}.
+\end{barticle}
+\endbibitem
 
-\harvarditem{Laake}{2013}{Laake2013}
-Laake, J.~L.  \harvardyearleft 2013\harvardyearright , {RMark}: An R Interface
-  for Analysis of Capture-Recapture Data with {MARK},, {AFSC} Processed Rep.
-  2013-01, Alaska Fish. Sci. Cent., {NOAA}, Natl. Mar. Fish. Serv., Seattle,
-  {WA}.
-\newline\harvardurl{http://www.afsc.noaa.gov/Publications/ProcRpt/PR2013-01.pdf}
+\bibitem[\protect\citeauthoryear{Hiby and Lovell}{1998}]{HibyLovell1998}
+\begin{barticle}[author]
+\bauthor{\bsnm{Hiby},~\bfnm{Lex}\binits{L.}} \AND
+  \bauthor{\bsnm{Lovell},~\bfnm{Phil}\binits{P.}}
+(\byear{1998}).
+\btitle{Using aircraft in tandem formation to estimate abundance of harbour
+  porpoise}.
+\bjournal{Biometrics}
+\bpages{1280--1289}.
+\end{barticle}
+\endbibitem
 
-\harvarditem{Laake \harvardand\ Borchers}{2004}{LaakeBorchers2004}
-Laake, J.~L., \harvardand\ Borchers, D.~L.  \harvardyearleft
-  2004\harvardyearright , ``Methods for incomplete detection at distance
-  zero,'' in {\em Advanced Distance Sampling}, eds. S.~Buckland, D.~Anderson,
-  K.~Burnham, J.~Laake, D.~Borchers, \harvardand\ L.~Thomas, Oxford, U.K.:
-  Oxford University Press, pp.~108--189.
+\bibitem[\protect\citeauthoryear{Huggins}{1989}]{Huggins1989}
+\begin{barticle}[author]
+\bauthor{\bsnm{Huggins},~\bfnm{R.~M}\binits{R.~M.}}
+(\byear{1989}).
+\btitle{On the statistical analysis of capture-recapture experiments}.
+\bjournal{Biometrika}
+\bvolume{76}
+\bpages{133--140}.
+\end{barticle}
+\endbibitem
 
-\harvarditem{Mac{K}enzie \harvardand\ Clement}{2016}{MacKenzieClement2016}
-Mac{K}enzie, D.~I., \harvardand\ Clement, D.  \harvardyearleft
-  2016\harvardyearright , ``Accounting for Lack of Independence and Partial
-  Overlap of Observation Zones in Line-Transect Mark-Recapture Distance
-  Sampling,'' {\em Journal of Agricultural, Biological, and Environmental
-  Statistics}, 21(1),~41--57.
+\bibitem[\protect\citeauthoryear{Laake}{2013}]{Laake2013}
+\begin{btechreport}[author]
+\bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}}
+(\byear{2013}).
+\btitle{{RMark}: An R Interface for Analysis of Capture-Recapture Data with
+  {MARK}}
+\btype{{AFSC} Processed Rep.} No. \bnumber{2013-01},
+\bpublisher{Alaska Fish. Sci. Cent., {NOAA}, Natl. Mar. Fish. Serv.},
+\baddress{Seattle, {WA}}.
+\end{btechreport}
+\endbibitem
 
-\harvarditem[Miller et~al.]{Miller, Burt, Rexstad \harvardand\
-  Thomas}{2013}{MillerEtAl2013}
-Miller, D.~L., Burt, M.~L., Rexstad, E.~A., \harvardand\ Thomas, L.
-  \harvardyearleft 2013\harvardyearright , ``Spatial models for distance
-  sampling data: recent developments and future directions,'' {\em Methods in
-  Ecology and Evolution}, 4,~1001--1010.
+\bibitem[\protect\citeauthoryear{Laake and Borchers}{2004}]{LaakeBorchers2004}
+\begin{bincollection}[author]
+\bauthor{\bsnm{Laake},~\bfnm{J.~L.}\binits{J.~L.}} \AND
+  \bauthor{\bsnm{Borchers},~\bfnm{D.~L.}\binits{D.~L.}}
+(\byear{2004}).
+\btitle{Methods for incomplete detection at distance zero}.
+In \bbooktitle{Advanced Distance Sampling}
+(\beditor{\bfnm{S.~T.}\binits{S.~T.}~\bsnm{Buckland}},
+  \beditor{\bfnm{D.~R.}\binits{D.~R.}~\bsnm{Anderson}},
+  \beditor{\bfnm{K.~P.}\binits{K.~P.}~\bsnm{Burnham}},
+  \beditor{\bfnm{J.~L.}\binits{J.~L.}~\bsnm{Laake}},
+  \beditor{\bfnm{D.~L.}\binits{D.~L.}~\bsnm{Borchers}} \AND
+  \beditor{\bfnm{L.}\binits{L.}~\bsnm{Thomas}}, eds.)
+\bpages{108-189}.
+\bpublisher{Oxford University Press}, \baddress{Oxford, U.K.}
+\end{bincollection}
+\endbibitem
 
-\harvarditem{{R Development Core Team}}{2016}{RTeam2016}
-{R Development Core Team}  \harvardyearleft 2016\harvardyearright , {\em R: A
-  Language and Environment for Statistical Computing}, R Foundation for
-  Statistical Computing, Vienna, Austria.
-\newblock {ISBN} 3-900051-07-0.
-\newline\harvardurl{http://www.R-project.org}
+\bibitem[\protect\citeauthoryear{Mac{K}enzie and
+  Clement}{2016}]{MacKenzieClement2016}
+\begin{barticle}[author]
+\bauthor{\bsnm{Mac{K}enzie},~\bfnm{D.~I.}\binits{D.~I.}} \AND
+  \bauthor{\bsnm{Clement},~\bfnm{D.}\binits{D.}}
+(\byear{2016}).
+\btitle{Accounting for Lack of Independence and Partial Overlap of Observation
+  Zones in Line-Transect Mark-Recapture Distance Sampling}.
+\bjournal{Journal of Agricultural, Biological, and Environmental Statistics}
+\bvolume{21}
+\bpages{41--57}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Royle et~al.]{Royle, Chandler, Sollmann \harvardand\
-  Gardner}{2013}{RoyleEtAl2013book}
-Royle, J.~A., Chandler, R.~B., Sollmann, R., \harvardand\ Gardner, B.
-  \harvardyearleft 2013\harvardyearright , {\em Spatial capture-recapture}
-  Academic Press.
+\bibitem[\protect\citeauthoryear{Miller et~al.}{2013}]{MillerEtAl2013}
+\begin{barticle}[author]
+\bauthor{\bsnm{Miller},~\bfnm{D.~L.}\binits{D.~L.}},
+  \bauthor{\bsnm{Burt},~\bfnm{M.~L.}\binits{M.~L.}},
+  \bauthor{\bsnm{Rexstad},~\bfnm{E.~A.}\binits{E.~A.}} \AND
+  \bauthor{\bsnm{Thomas},~\bfnm{L.}\binits{L.}}
+(\byear{2013}).
+\btitle{Spatial models for distance sampling data: recent developments and
+  future directions}.
+\bjournal{Methods in Ecology and Evolution}
+\bvolume{4}
+\bpages{1001-1010}.
+\end{barticle}
+\endbibitem
 
-\harvarditem[Royle et~al.]{Royle, Dorazio \harvardand\
-  Link}{2007}{RoyleEtAl2007b}
-Royle, J., Dorazio, R., \harvardand\ Link, W.  \harvardyearleft
-  2007\harvardyearright , ``Analysis of multinomial models with unknown index
-  using data augmentation,'' {\em Journal of Computational and Graphical
-  Statistics}, 16,~1--19.
+\bibitem[\protect\citeauthoryear{Royle, Dorazio and
+  Link}{2007}]{RoyleEtAl2007b}
+\begin{barticle}[author]
+\bauthor{\bsnm{Royle},~\bfnm{J.~A.}\binits{J.~A.}},
+  \bauthor{\bsnm{Dorazio},~\bfnm{R.~M.}\binits{R.~M.}} \AND
+  \bauthor{\bsnm{Link},~\bfnm{W.~A.}\binits{W.~A.}}
+(\byear{2007}).
+\btitle{Analysis of multinomial models with unknown index using data
+  augmentation}.
+\bjournal{Journal of Computational and Graphical Statistics}
+\bvolume{16}
+\bpages{1-19}.
+\end{barticle}
+\endbibitem
 
-\harvarditem{White \harvardand\ Burnham}{1999}{WhiteBurnham1999}
-White, G.~C., \harvardand\ Burnham, K.~P.  \harvardyearleft
-  1999\harvardyearright , ``Program MARK: Survival estimation from populations
-  of marked animals,'' {\em Bird Study}, 46 Supplement,~120--138.
+\bibitem[\protect\citeauthoryear{Royle et~al.}{2013}]{RoyleEtAl2013book}
+\begin{bbook}[author]
+\bauthor{\bsnm{Royle},~\bfnm{J~Andrew}\binits{J.~A.}},
+  \bauthor{\bsnm{Chandler},~\bfnm{Richard~B}\binits{R.~B.}},
+  \bauthor{\bsnm{Sollmann},~\bfnm{Rahel}\binits{R.}} \AND
+  \bauthor{\bsnm{Gardner},~\bfnm{Beth}\binits{B.}}
+(\byear{2013}).
+\btitle{Spatial capture-recapture}.
+\bpublisher{Academic Press}.
+\end{bbook}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{Schweder et~al.}{1999}]{SchwederEtAl1999}
+\begin{barticle}[author]
+\bauthor{\bsnm{Schweder},~\bfnm{Tore}\binits{T.}},
+  \bauthor{\bsnm{Skaug},~\bfnm{Hans~J.}\binits{H.~J.}},
+  \bauthor{\bsnm{Langaas},~\bfnm{Mette}\binits{M.}} \AND
+  \bauthor{\bsnm{Dimakos},~\bfnm{Xeni~K.}\binits{X.~K.}}
+(\byear{1999}).
+\btitle{Simulated Likelihood Methods for Complex Double-Platform Line Transect
+  Surveys}.
+\bjournal{Biometrics}
+\bvolume{55}
+\bpages{678--687}.
+\bdoi{10.1111/j.0006-341X.1999.00678.x}
+\end{barticle}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{{R Development Core Team}}{2016}]{RTeam2016}
+\begin{bmanual}[author]
+\bauthor{\bsnm{{R Development Core Team}}}
+(\byear{2016}).
+\btitle{R: A Language and Environment for Statistical Computing}
+\bpublisher{R Foundation for Statistical Computing},
+\baddress{Vienna, Austria}
+\bnote{{ISBN} 3-900051-07-0}.
+\end{bmanual}
+\endbibitem
+
+\bibitem[\protect\citeauthoryear{White and Burnham}{1999}]{WhiteBurnham1999}
+\begin{barticle}[author]
+\bauthor{\bsnm{White},~\bfnm{G.~C.}\binits{G.~C.}} \AND
+  \bauthor{\bsnm{Burnham},~\bfnm{K.~P.}\binits{K.~P.}}
+(\byear{1999}).
+\btitle{Program MARK: Survival estimation from populations of marked animals}.
+\bjournal{Bird Study}
+\bvolume{46 Supplement}
+\bpages{120-138}.
+\end{barticle}
+\endbibitem
 
 \end{thebibliography}

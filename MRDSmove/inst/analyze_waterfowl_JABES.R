@@ -467,7 +467,7 @@ Movement[5:9]=dexp(abs(Distance[5:9]),exp(.42))
 Measure=dexp(abs(Distance),exp(1.24))
 Movement=Movement/sum(Movement)
 Measure=Measure/sum(Measure)
-Plot_df = data.frame(Distance=rep(c(-4:4),2),Kernel=rep(c("Movement","Measure"),each=9),Probability=c(Movement[2:10],Measure[2:10]))
+Plot_df = data.frame(Distance=rep(c(-4:4),2),Kernel=rep(c("Movement","Measure"),each=9),Probability=c(Movement[1:9],Measure[1:9]))
 
 library(ggplot2)
 kernel_plot = ggplot(Plot_df)+geom_line(aes(x=Distance,y=Probability,lty=Kernel),size=1.2)+theme_gray(base_size=16)+xlab(expression(paste("Distance bin discrepancy (",delta,")")))

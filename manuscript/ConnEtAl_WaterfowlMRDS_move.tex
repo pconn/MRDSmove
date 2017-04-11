@@ -1,26 +1,22 @@
-\documentclass[12pt,fleqn]{article}
-%\documentclass[12pt,a4paper]{article}
-\usepackage{amsmath,epsfig,epsf,psfrag,natbib,lineno,hyperref,setspace}
-%\usepackage{a4wide,amsmath,epsfig,epsf,psfrag}
+%\documentclass[12pt,fleqn]{article}
+%\usepackage{amsmath,epsfig,epsf,psfrag,natbib,lineno,hyperref,setspace}
+
+
+\documentclass[aoas,preprint]{imsart}
+
+\RequirePackage[OT1]{fontenc}
+\RequirePackage{amsthm,amsmath,lineno,epsfig,epsf,psfrag}
+\RequirePackage[]{natbib}
+\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage[nolists,nomarkers]{endfloat}
 
+\startlocaldefs
+\numberwithin{equation}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\endlocaldefs
 
 \begin{document}
-
-\doublespacing
-
-\textbf{Simultaneous modelling of movement, measurement error, and observer dependence in double-observer distance sampling surveys}
-
-\linenumbers
-
-\bigskip
-
-\textbf{Abstract}: Wildlife researchers often use detections, non-detections and recorded distances of animals encountered in transect surveys to estimate abundance. However, commonly available distance sampling estimators require that distances to target animals are made without error and that animals are stationary while sampling is being conducted.  In practice these requirements are often violated. In this paper, we describe a marginal likelihood framework for estimating abundance from double-observer data that can accommodate movement and measurement error.  In particular, we suppose that two observers independently detect and record binned distances to observed animal groups, and that they record a binary indicator for whether animals were moving or not.  Under this framework, stationary animals are subject to measurement error and moving animals are subject to both movement and measurement error.  Integrating over unknown animal locations, we construct a marginal likelihood for detection, movement, and measurement error parameters. Estimates of animal abundance can then by obtained using a modified Horvitz-Thompson-like estimator.  In addition, unmodelled heterogeneity in detection probability can be accommodated through observer dependence parameters.  Using simulation, we show that our approach yields low bias compared to approaches that ignore movement and/or measurement error, including in cases where there is considerable detection heterogeneity.  We demonstrate our approach using data from a double-observer waterfowl helicopter survey.
-
-
-\textbf{Key words}: aerial survey, mark-recapture distance sampling, measurement error, movement, point independence
-
-
 
 \def\VAR{{\rm Var}\,}
 \def\COV{{\rm Cov}\,}
@@ -39,33 +35,85 @@
 
 
 
+\begin{frontmatter}
+\title{Simultaneous modelling of movement, measurement error, and observer dependence in double-observer distance sampling surveys}
+\runtitle{Distance sampling with movement}
+
+\begin{aug}
+\author{\fnms{Paul B.} \snm{Conn}\thanksref{t1}\ead[label=e1]{paul.conn@noaa.gov}}
+\and
+\author{\fnms{Ray T.} \snm{Alisauskas}\thanksref{t2}\ead[label=e2]{ray.alisauskas@canada.ca}}
+
+\affiliation{Marine Mammal Laboratory, Alaska Fisheries Science Center, National Marine Fisheries Service, NOAA\thanksmark{t1} and Wildlife Research Division, Environment and Climate Change Canada\thanksmark{t2}}
+
+\address{7600 Sand Point Way NE\\
+Seattle, WA 98115 USA \\
+\printead{e1} }
+%\phantom{E-mail:\ }\printead*{e1}}
+
+\address{Prairie and Northern Wildlife Research Centre\\
+115 Perimeter Rd.\\
+Saskatoon, SK S7N 0X4 CANADA\\
+\printead{e2} }
+%\printead{u1}}
+\end{aug}
+
+\begin{abstract}
+Mark-recapture distance sampling uses detections, non-detections and recorded distances of animals encountered in transect surveys to estimate abundance. However, commonly available distance sampling estimators require that distances to target animals are made without error and that animals are stationary while sampling is being conducted.  In practice these requirements are often violated. In this paper, we describe a marginal likelihood framework for estimating abundance from double-observer data that can accommodate movement and measurement error when observations are made consecutively (as with front and rear observers) and when animals are randomly distributed when detected by the first observer.  Our framework requires that two observers independently detect and record binned distances to observed animal groups, as we well as a binary indicator for whether animals were moving or not.  We then assume that stationary animals are subject to measurement error whereas moving animals are subject to both movement and measurement error.  Integrating over unknown animal locations, we construct a marginal likelihood for detection, movement, and measurement error parameters. Estimates of animal abundance are then obtained using a modified Horvitz-Thompson-like estimator.  In addition, unmodelled heterogeneity in detection probability can be accommodated through observer dependence parameters.  Using simulation, we show that our approach yields low bias compared to approaches that ignore movement and/or measurement error, including in cases where there is considerable detection heterogeneity.  We demonstrate our approach using data from a double-observer waterfowl helicopter survey.
+\end{abstract}
+
+%\begin{keyword}[class=MSC]
+%\kwd[Primary ]{60K35}
+%\kwd{60K35}
+%\kwd[; secondary ]{60K35}
+%\end{keyword}
+
+\begin{keyword}
+\kwd{aerial survey}
+\kwd{double-observer}
+\kwd{mark-recapture distance sampling}
+\kwd{measurement error}
+\kwd{movement}
+\kwd{point independence}
+\end{keyword}
+
+\end{frontmatter}
+
+\linenumbers
+
+
+
+
+
 
 \section{Introduction}
 
 Distance sampling surveys \citep{BurnhamEtAl1980,BucklandEtAl2001} are often used to estimate the abundance of wildlife populations.  Historically, such surveys were conducted by a single observer who followed a transect line and recorded the perpendicular distance to each detected animal group.  Assuming 100\% detection on the transect line, models can be fitted to these data that estimate abundance over the surveyed area while accounting for detection probabilities that decline with distance from the transect line.
 
-More recently, investigators discovered that double-observer surveys have some large advantages over single-observer surveys.  For instance, one can use records of detection/non-detection to relax the assumption of perfect detection on the transect line \citep{BorchersEtAl1998}, a crucial development for many species and sampling situations (e.g. aerial surveys).  Analysis of double-observer distance data is now canonically referred to as ``mark-recapture distance sampling" \citep[MRDS; ][]{LaakeBorchers2004} because there is a detection history (i.e. binary detection/nondetection records for each observer) in addition to recorded distances. Analysis of these histories can be done in a manner similar to a two sample mark-recapture experiment, although this approach ignores additional information about observer dependence implicity included in the distribution of observed distances.
+More recently, investigators discovered that double-observer surveys have some large advantages over single-observer surveys.  For instance, one can use records of detection/non-detection to relax the assumption of perfect detection on the transect line \citep{BorchersEtAl1998}, a crucial development for many species and sampling situations (e.g. aerial surveys).  Analysis of double-observer distance data is now canonically referred to as ``mark-recapture distance sampling" \citep[MRDS; ][]{LaakeBorchers2004} because there is a detection history (i.e. binary detection/nondetection records for each observer) in addition to recorded distances.
 
-Several observer configurations are possible within an MRDS estimation framework \citep{BurtEtAl2014}.  In an ``independent" figuration, observers can detected animals independently of one another.  Under this configuration it is possible to try to account for heterogeneity in detection probabilities (e.g. visual distinctiveness of different animal groups) by modelling lack of fit between the distribution of observed distances and estimated detection probabilities as a function of distance \citep{LaakeBorchers2004,BorchersEtAl2006,BucklandEtAl2010}.  The ability to account for such heterogeneity is important, since abundance estimators are negatively biased otherwise. Alternatively, in a ``trial" configuration \citep{LaakeBorchers2004}, one observer searches ahead, while another searches closer to the survey platform.  Under this configuration, detections by the first observer are used as trials for the second observer.  Collecting data in this manner can be used to reduce bias associated with responsive movement of animals (which often positively biases abundance estimators), but one can no longer model heterogeneity in detection probability \citep{BurtEtAl2014}.
+Several authors have investigated consequences and corrections for movement in distance sampling applications.  For instance, \citet{GlennieEtAl2015} showed that movement could cause considerable bias (typically positive) in distance-based abundance estimators, but did not attempt to develop methods to adjust for such bias. \citet{HibyLovell1998} developed a likelihood framework to estimate abundance when movement is random (i.e., nonresponsive to the survey platform) and occurs between successive observations.
 
-In this paper, we develop an integrated likelihood framework to account for movement and measurement error using an independent observer MRDS configuration.  Our objective is to account for the biasing effects of measurement error and responsive movement while also being able to model individual heterogeneity through an observer dependence specification.  Although \citet{GlennieEtAl2015} showed movement could cause considerable bias in distance-based abundance estimators, we have not found any papers that attempt to explicitly model movement though a number of authors have proposed models that account for measurement error in specific distance sampling applications \citep[see e.g.][and references therein]{BorchersEtAl2010}.
+Likewise, \citet{BorchersEtAl2010} showed that measurement errors could cause substantial (usually positive) bias in distance sampling abundance estimators. A number of authors have proposed models that account for measurement error in specific distance sampling applications \citep[see e.g.][and references therein]{SchwederEtAl1999,BorchersEtAl2010}.
 
-The remainder of this article is structured as follows.  First, we describe a motivating data set, in which distance, detection histories, and individual covariates are assembled from a double-observer waterfowl aerial survey.  Second, we describe a maximum marginal likelihood (MML) framework for analyzing these data.  Under this framework, animal locations are treated as latent variables.  Next, we illustrate our method by analyzing the waterfowl data set and examine estimator performance with two simulation studies.  We conclude with a short discussion.
+Several observer configurations are possible within an MRDS estimation framework \citep{BurtEtAl2014} and have important implications for bias control when animals move in response to a survey platform (i.e. ``responsive" movement).  In an ``independent" configuration, observers detect animals independently of one another.  Under this configuration it is possible to try to account for heterogeneity in detection probabilities (e.g. visual distinctiveness of different animal groups) by modelling lack of fit between the distribution of observed distances and estimated detection probabilities as a function of distance \citep{LaakeBorchers2004,BorchersEtAl2006,BucklandEtAl2010}.  The ability to account for such heterogeneity is important, since abundance estimators are negatively biased otherwise. Alternatively, in a ``trial" configuration \citep{BucklandTurnock1992}, one observer searches ahead, while another searches closer to the survey platform.  Under this configuration, detections by the first observer are used as trials for the second observer.  The trial configuration is useful for reducing bias associated with responsive movement of animals (which often positively biases abundance estimators), but one can no longer model heterogeneity in detection probability \citep{BurtEtAl2014}.
+
+In this paper, we develop an integrated likelihood framework to account for movement and measurement error using an independent observer MRDS configuration.  Specifically, we address movement between the time two observers (e.g., front and rear seat observers in aerial surveys) are able to make detections.  Our objective is to account for the biasing effects of measurement error and responsive movement while also being able to model individual heterogeneity through an observer dependence specification.  The remainder of this article is structured as follows.  First, we describe a motivating data set, in which distance, detection histories, and individual covariates are assembled from a double-observer waterfowl aerial survey.  Second, we describe a maximum marginal likelihood (MML) framework for analyzing these data.  Under this framework, true animal locations are treated as latent variables.  Next, we illustrate our method by analyzing the waterfowl data set and examine estimator performance with two simulation studies.  We conclude with a short discussion.
 
 
 \section{Waterfowl data}
 
-In June of 2014, biologists conducted a pilot double-observer helicopter (BELL 206L on floats) survey of Arctic bird species in the Queen Maud Gulf Migratory Bird Sanctuary (Nunavut, Canada). The birds surveyed were predominantly waterfowl, but also included cranes and ptarmigan; we refer to them collectively as waterfowl for the remainder of the paper. The purpose of this particular survey was not to estimate abundance. Rather, researchers were interested in comparing estimates of detection probability from double-observer survey methods to those using single-observer methods.
+In June of 2014, biologists conducted a pilot double-observer helicopter (BELL 206L on floats) survey of Arctic bird species in the Queen Maud Gulf Migratory Bird Sanctuary (Nunavut, Canada). The birds surveyed were predominantly waterfowl, but also included cranes and ptarmigan; we refer to them collectively as waterfowl for the remainder of the paper. The purpose of this particular survey was not to estimate abundance. Rather, researchers were interested in comparing estimates of detection probability from double-observer distance sampling with those from strip transects.
 The survey is described in greater detail elsewhere \citep{AlisauskasConn2017}, but we briefly provide information relevant to the analysis conducted later in this paper.
 
-During the survey, two observers on the same (left) side of the helicopter independently detected and recorded the perpendicular distance from the transect line to each bird group they observed.  Distances were binned into 6 classes: 0-40m, 40-80m, 80-120m, 120-160m, 160-200m, and 200m+.  They also recorded species, the number of waterfowl in each detected group (``group"), and a binary indicator for whether the waterfowl group was flapping their wings (``moving").  These data were previously analyzed by \citet{AlisauskasConn2017}, who used standard MRDS methods that ignored movement and measurement error in their analysis.  Their analysis suggested higher detection probabilities for moving individuals, larger group sizes, and for the front seat observer (relative to a rear seat observer).  They also estimated similar species effects on detection for 7 of the 9 species analyzed; here, we pool detections of these 7 species (Canada goose, king eider, long tailed duck, northern pintail, rock patarmigan, sandhill crane, and white fronted goose) to form an illustrative dataset.  This protocol led to a total of 964 unique waterfowl group detections; 359 were detected by both observers, 348 by the front observer only, and 257 by the back observer only.  Note that the back observer's view of the first distance bin nearest the transect line was partially obstructed by the left helicopter float.  A plot of observed distance deviations suggested asymmetrical responsive movement (away) from the aircraft for nonstationary animal groups.  There were also some minor distance discrepancies for animal groups that were not moving, which is suggestive of measurement error (Fig. \ref{fig:dist_hists}).  Hence, our objectives were to build models that formally account for movement and measurement error processes.
+During the survey, two observers, one behind the other, on the same (left) side of the helicopter independently detected and recorded the perpendicular distance from the transect line to each bird group they observed.  Distances were binned into 6 classes: 0-40m, 40-80m, 80-120m, 120-160m, 160-200m, and 200m+ (note that observations in the final bin are not used in subsequent analysis).  They also recorded species, the number of waterfowl in each detected group (``group"), and a binary indicator for whether the waterfowl group was flapping their wings (``moving").  These data were previously analyzed by \citet{AlisauskasConn2017}, who used standard MRDS methods that ignored movement and measurement error in their analysis.  Their analysis suggested higher detection probabilities for moving individuals, larger group sizes, and for the front seat observer (relative to a rear seat observer).  They also estimated similar species effects on detection for 7 of the 9 species analyzed; here, we pool detections of these 7 species (Canada goose, king eider, long tailed duck, northern pintail, rock patarmigan, sandhill crane, and white fronted goose) to form an illustrative dataset.  This protocol led to a total of 964 unique waterfowl group detections; 359 were detected by both observers, 348 by the front observer only, and 257 by the back observer only.  Note that the back observer's view of the first distance bin nearest the transect line was partially obstructed by the left helicopter float.  A plot of observed distance deviations suggested asymmetrical responsive movement (away) from the aircraft for nonstationary animal groups.  There were also some minor distance discrepancies for animal groups that were not moving, suggesting measurement error (Fig. \ref{fig:dist_hists}).  Hence, our objectives were to build models that formally account for movement and measurement error processes.
 
 \section{Model development}
 
 
 Consider a double-observer MRDS survey where each observer records binned distances to detected animal groups, independently of the other observer, and a total of $n$ animal groups are encountered by at least one observer (see Table \ref{tab:notation} for a complete list of notation).  We develop a two stage approach for estimating abundance in the surveyed area from such data.  In the first step, a MML framework is used to simultaneously estimate parameters of detection, movement, and measurement error processes.  In the second, a Horvitz-Thompson-like estimator is used to estimate abundance conditioned on parameter estimates from step 1 (a bootstrap procedure is used to quantify precision).  For purposes of this paper we do not explicitly consider the problem of extrapolating abundance/density to a larger region (e.g. to unsurveyed locations), although this would be a natural extension in applied situations; we touch on this issue in the Discussion.
 
-In MRDS surveys with binned distances, observers record animals as occurring in one of $n_\mathcal{S}$ perpendicular distance bins, $\mathcal{S} = \mathcal{S}_1,\mathcal{S}_2,\hdots,\mathcal{S}_{n_\mathcal{S}}$.  Detection probability typically decreases with distance from the transect line, and the maximum distance bin is often set such that animals further away are poorly detected and can be ignored without greatly affecting precision of abundance estimates.  Movement and measurement error introduce complications: animals can potentially move into or out of $\mathcal{S}$, and animals outside of $\mathcal{S}$ can be detected in $\mathcal{S}$.  For these reasons, the models we develop rely on augmenting $\mathcal{S}$ with additional distance bins to allow for movement and measurement error (Fig. \ref{fig:aug_bins}).  Call this augmented set $\mathcal{Z}$.
+In MRDS surveys with binned distances, observers record animals as occurring in one of $n_\mathcal{S}$ perpendicular distance bins, $\mathcal{S} = \mathcal{S}_1,\mathcal{S}_2,\hdots,\mathcal{S}_{n_\mathcal{S}}$.  Detection probability typically decreases with distance from the transect line, and the maximum distance bin is often set such that animals further away are poorly detected and can be ignored without greatly affecting precision of abundance estimates.  Movement and measurement error introduce complications: in addition to movement and measurement errors among elements of $\mathcal{S}$, animals can potentially move into or out of $\mathcal{S}$, and animals outside of $\mathcal{S}$ can be detected in $\mathcal{S}$.  For these reasons, the models we develop rely on augmenting $\mathcal{S}$ with additional distance bins to allow for movement and measurement error (Fig. \ref{fig:aug_bins}).  Call this augmented set $\mathcal{Z}$.
 
 Let $y_{oi}$ be a binary indicator for whether or not the $i$th animal group was detected by observer $o$.  Similarly, let $d_{oi}$ denote the distance bin recorded by observer $o$ for animal group $i$ (note $d_{oi}$ is only defined when $y_{oi}=1$). Letting bold lower case symbols denote vectors (e.g. ${\bf y}_{o \cdot}$ gives a sequence of detections for observer $o$, $i=1,2,\hdots,n$) and bold upper case symbols denote matrices (e.g. ${\bf Y}$ is ($2 \times n$) matrix of all detection/nondetections),  we seek to define a marginal likelihood $[\boldsymbol{\theta} | {\bf Y},{\bf D}, {\bf X}]$, where $\boldsymbol{\theta}= \{ \boldsymbol{\beta,\phi,\varphi} \}$ are parameters describing probabilities of detection, movement, and measurement error, and ${\bf X}$ include individual covariates collected for each animal group that can be used to explain variation in detection probabilities.
 
@@ -89,7 +137,7 @@ As such, we write the joint marginal likelihood of detection, movement, and meas
    \right).
   \label{eq:lik}
 \end{eqnarray}
-We now describe each of the likelihood components in further detail.
+Recall that we use the $z_{i \cdot}$ notation to indicate the two element vector of true distance values (over both observers' subscripts; see Table \ref{tab:notation} for other notation). We now describe each of the likelihood components in further detail.
 
 \subsubsection{Distribution of animal locations}
 
@@ -147,7 +195,7 @@ Note that we write $p_{io}$ as a function of $z_{io}$ to emphasize that the desi
 
 \subsubsection{Likelihood of observed detections}
 
-The next component of the the likelihood is $[{\bf y}_{i \cdot},{\bf d}_{i \cdot}|{\bf z}_{i \cdot} , \boldsymbol{\theta} , {\bf x}_i]$, the probability of observing the particular detection history and distance bin values for animal group $i$ conditional on true location.  Conditional on detection by at least one observer, there are again three possible types of encounter histories: '11', '10', or '01'.  For '11' histories, there are $n_\mathcal{S}^2$ combinations of possible recorded distance bins; for '10' histories, there are $n_\mathcal{S}$ distance bins possible for observer 1; for '01' histories, there are $n_\mathcal{S}$ distance bins possible for observer 2.  Thus, we can view $[{\bf y}_{i \cdot},{\bf d}_{i \cdot}|{\bf z}_{i \cdot} , \boldsymbol{\theta} , {\bf x}_i]$ as a multinomial distribution with index 1 and $n_\mathcal{S}^2 + 2 n_\mathcal{S}$ possible outcomes. The likelihood contribution for a particular animal group $i$ can thus be written as
+The next component of the likelihood is $[{\bf y}_{i \cdot},{\bf d}_{i \cdot}|{\bf z}_{i \cdot} , \boldsymbol{\theta} , {\bf x}_i]$, the probability of observing the particular detection history and distance bin values for animal group $i$ conditional on true location.  Conditional on detection by at least one observer, there are again three possible types of encounter histories: '11', '10', or '01'.  For '11' histories, there are $n_\mathcal{S}^2$ combinations of possible recorded distance bins; for '10' histories, there are $n_\mathcal{S}$ distance bins possible for observer 1; for '01' histories, there are $n_\mathcal{S}$ distance bins possible for observer 2.  Thus, we can view $[{\bf y}_{i \cdot},{\bf d}_{i \cdot}|{\bf z}_{i \cdot} , \boldsymbol{\theta} , {\bf x}_i]$ as a multinomial distribution with index 1 and $n_\mathcal{S}^2 + 2 n_\mathcal{S}$ possible outcomes. The likelihood contribution for a particular animal group $i$ can thus be written as
 \begin{linenomath}
 \begin{equation*}
     \label{eq:obsmod}
@@ -170,7 +218,7 @@ Minimizing the negative log-likelihood in Eqn. \ref{eq:lik} provides marginal ma
 \end{eqnarray*}
 However, direct application of this estimator is clearly inappropriate under movement and measurement error, as it can potentially include animals outside of the surveyed area, or include animals that move into the surveyed area.
 
-Since distance sampling produces estimates of abundance at a single point in time, we must first define the time and area for which the estimate applies before constructing an appropriate estimator.  In the case of responsive movement away from a survey platform, we are better off referencing abundance relative to the position of animals when they enter the field of view of observer 1 than we are for observer 2.  Also, since analysis only uses animals perceived to be in $\mathcal{S}$, it may be best to limit the scope of inference to those animals that truly occur in $\mathcal{S}$.  We construct a Horvitz-Thompson-like estimator for abundance in the surveyed region $\mathcal{S}$ at time 1 as follows:
+Since distance sampling produces estimates of abundance at a single point in time, we must first define the time and location for which the estimate applies before constructing an appropriate estimator.  In the case of responsive movement away from a survey platform, we are better off referencing abundance relative to the position of animals when they enter the field of view of observer 1 than we are for observer 2 since we assume observer 1 detects an animal first.  Also, since analysis only uses animals perceived to be in $\mathcal{S}$, it may be best to limit the scope of inference to those animals that truly occur in $\mathcal{S}$.  We construct a Horvitz-Thompson-like estimator for abundance in the surveyed region $\mathcal{S}$ at time 1 as follows:
 \begin{eqnarray}
   \hat{N}|\boldsymbol{\theta} & = & \sum_i \sum_{z_{i1} \in \mathcal{S}} \sum_{z_{i2} \in \mathcal{Z}} \frac{g_i \times [{\bf z}_{i \cdot} | \boldsymbol{\theta}]}{p_i^*(z_{i1},z_{i2})}.
   \label{eq:ht}
@@ -195,7 +243,7 @@ So far, we have not attempted to model detection heterogeneity outside of indivi
 
 In traditional MRDS applications (i.e. without movement and measurement error), one approach is to correct for this bias by estimating observer dependence parameters, typically through inclusion of an additional probability density function for observed distances in the likelihood \citep[cf.][]{BucklandEtAl2010}.  However, inclusion of such a pdf in our likelihood appears problematic, as movement alters interpretation of distance distributions \citep{BurtEtAl2014}.  Alternatively, \citet{MacKenzieClement2016} suggested that observer dependence could also be included by modeling \textit{conditional} detection probabilities; that is, including detection by one observer as a covariate for detection of the other.  For instance, detection probabilities could potentially be written as a logit-linear function of an autocovariate $\xi_{io} = y_{i,3-o}$.  We adapt this latter idea as a way to accommodate detection heterogeneity in data subject to movement and measurement error.
 
-The major complication with using a detection autocovariate as a predictor in our case is that we are no longer able to say that an animal group with $y_{io}=0$ was actually undetected by observer $o$.  It could, for instance, have been detected but determined to not be in $\mathcal{S}$.  As such, we view the autocovariate $\xi_{io}$ as a latent variable.  If $y_{io}=1$, then $\xi_{i,3-i}=1$ with certainty; however, if $y_{io}=0$ we do not know whether $\xi_{i,3-i}$ is 0 or 1. Summing over each encounter history type (11,01,or 10) subject to uncertainty about $\xi_{io}$, we now need to calculate the probability of being observed by at least one observer as
+The major complication with using a detection autocovariate as a predictor in our case is that we are no longer able to say that an animal group with $y_{io}=0$ was actually undetected by observer $o$.  It could, for instance, have been detected but determined to not be in $\mathcal{S}$.  As such, we view the autocovariate $\xi_{io}$ as a latent variable.  If $y_{io}=1$, then $\xi_{i,3-o}=1$ with certainty; however, if $y_{io}=0$ we do not know whether $\xi_{i,3-o}$ is 0 or 1. Summing over each encounter history type (11,01,or 10) subject to uncertainty about $\xi_{io}$, we now need to calculate the probability of being observed by at least one observer as
 \begin{eqnarray*}
   \label{eq:pstar2}
   p_i^*(z_{i1},z_{i2}|{\bf x}_i,\boldsymbol{\beta},\boldsymbol{\phi},\boldsymbol{\varphi}) & = &
@@ -246,13 +294,13 @@ We fitted 12 MML models to our waterfowl data, varying by (1) movement and measu
 For the HA models, detection probability was set to the structure on the MML model with the best AIC score.
 All models included the following predictors within the logit-linear model for detection probability: group size, moving/not moving, observer (front vs. back), distance, $\text{distance}^2$, and an interaction between the distance effects and the observer effects.  The latter interaction was included because the view of the first distance bin was partially obstructed for observer 2 whose distance distribution appeared to peak further away from the helicopter \citep[see][]{AlisauskasConn2017}.
 
-AIC strongly favored models with Laplace movement and measurement error kernels (Fig. \ref{fig:kernel}) over Gaussian kernels, although the impact of the functional form of the kernel on resultant abundance estimates was quite small (Table \ref{tab:ests}).  The highest ranked model had an interaction between distance and moving/not moving, suggesting different detection function shapes for moving vs. stationary animals. However, pairwise model comparisons with and without such an effect had similar AIC scores, so this effect was likely small (also see Fig. \ref{fig:GOF}). Point and limiting independence models were favored over full independence models, suggesting some level of detection heterogeneity that was not captured via gathered covariates.
+AIC strongly favored models with Laplace movement and measurement error kernels (Fig. \ref{fig:kernel}) over Gaussian kernels, although the impact of the functional form of the kernel on resultant abundance estimates was quite small (Table \ref{tab:ests}).  The highest ranked model had an interaction between distance and moving/not moving, suggesting different detection function shapes for moving vs. stationary animals. However, pairwise model comparisons with and without such an effect had similar AIC scores, so this effect was likely small (also see Fig. \ref{fig:GOF}). Point independence (`pi') and limiting independence (`li') models were favored over full independence (`fi') models, suggesting some level of detection heterogeneity that was not captured via gathered covariates.
 
-The form of dependence had large effects on abundance estimates and accompanying standard errors. In general, `li' models produced the smallest estimates ($\hat{G}= 1122 \text{ to } 1130$), `fi' models produced the next highest estimates ($\hat{G}= 1244 \text{ to } 1259$), and `pi' models produced the highest estimates ($\hat{G}= 1394 \text{ to } 1519$; Table \ref{tab:ests}).  Models with similar support often produced estimates of abundance that were quite different.  For instance, the top two models (including a pi model and an li model) were only 1.2 AIC units apart but produced estimates of $\hat{G}=1519$ and $\hat{G}=1122$, respectively.  The `pi' models predict increasing observer dependence with distance, while the `li' models suggested strongly negative observer dependence near the transect line which linearly increased to positive dependence in distance bin 5 and beyond.  This latter type of observer dependence could occur if observers have different fields of view and are likely to detect different animal groups close to the aircraft, but are more likely to see the same animals (presumably the highly distinctive ones) farther away.
+The form of dependence had large effects on abundance estimates and accompanying standard errors. In general, `li' models produced the smallest estimates ($\hat{G}= 1122 \text{ to } 1130$), `fi' models produced the next highest estimates ($\hat{G}= 1244 \text{ to } 1259$), and `pi' models produced the highest estimates ($\hat{G}= 1394 \text{ to } 1519$; Table \ref{tab:ests}).  Models with similar support often produced estimates of abundance that were quite different.  For instance, the top two models (including a pi model and an li model) were only 1.2 AIC units apart but produced estimates of $\hat{G}=1519$ and $\hat{G}=1122$, respectively.  The `pi' models predict increasing observer dependence with distance, while the `li' models suggested strongly negative observer dependence near the transect line which linearly increased to positive dependence in distance bin 5 and beyond.  This latter type of observer dependence could occur if observers have different fields of view and are likely to detect different animal groups close to the aircraft, but are more likely to see the same animals (presumably the highly distinctive ones) farther away. 
 
-Plots of movement and measurement error kernels (Fig. \ref{fig:kernel}) for the highest ranked model resembled raw data histograms (Fig. \ref{fig:dist_hists}).  However, inclusion of movement and measurement error in the model did not appear to largely affect abundance estimates.  For instance, HA1 and HA2 (the models without movement or measurement error) produced estimates of 1239 and 1278 waterfowl groups, respectively.  By comparison, the 4 `fi' models (which, like the HA models, presume conditional independence in observer detections), produced estimates of 1244-1259.   In our example, it seemed far more important to account for different types of observer dependence.  If an estimate were needed for management or conservation purposes, it would be wise to compute a model averaged estimate that incorporates uncertainty about the correction functional form of observer dependence (as well as attendant standard errors, which are much higher for `li' and `pi' models than for `fi' models).  We note that several of the `li' models did not converge, a relatively frequent occurence when fitting MRDS models \cite{BucklandEtAl2010,MacKenzieClement2016}.
+Plots of movement and measurement error kernels (Fig. \ref{fig:kernel}) for the highest ranked model resembled raw data histograms (Fig. \ref{fig:dist_hists}).  However, inclusion of movement and measurement error in the model did not appear to largely affect abundance estimates.  For instance, HA1 and HA2 (the models without movement or measurement error) produced estimates of 1239 and 1278 waterfowl groups, respectively.  By comparison, the 4 `fi' models (which, like the HA models, presume conditional independence in observer detections), produced estimates of 1244-1259.   In our example, it seemed far more important to account for different types of observer dependence.  If an estimate were needed for management or conservation purposes, it would be wise to compute a model averaged estimate that incorporates uncertainty about the correction functional form of observer dependence (as well as attendant standard errors, which are much higher for `li' and `pi' models than for `fi' models).  We note that several of the `li' models did not converge, a relatively frequent occurence when fitting MRDS models \citep{BucklandEtAl2010,MacKenzieClement2016}.
 
-To examine fit of our model to the data, we compared the properties of our MRDS dataset to 1000 data sets simulated from the highest ranked AIC model.  In general, data sets simulated under our model had similar proportions of animals observed in the five distance bin classes as we observed in the field (Fig. \ref{fig:GOF}).  A notable exception was a tendency to overpredict the proportion of moving animals in distance bin 3.  We are unsure of the reason for this behavior, but have resisted the urge to consider more highly parameterized structures since a smooth decrease in the number of animals encountered as a function of distance is often expected a priori \citep{BucklandEtAl2001}, and it would be difficult to fit this particular ``dip" in our distance data without making the detection model multimodal.  Our model did a reasonable job in replicating the proportions of animals with each detection history type observed in the field.  For instance, the number of `11', `10' and `01' histories compiled for moving animals was 289, 261, and 179, respectively; these compared to 95\% simulation intervals of (257,307), (227,276), and (173,219).  For stationary animals, we observed 64 `11', 92 `10' and 79 `01' histories compared to simulation intervals of (53,80), (74,103), and (68,95).
+To examine fit of our model to the data, we compared the properties of our MRDS dataset to 1000 data sets simulated from the highest ranked AIC model.  In general, data sets simulated under our model had similar proportions of animals observed in the five distance bin classes as we observed in the field (Fig. \ref{fig:GOF}).  A notable exception was a tendency to overpredict the proportion of moving animals in distance bin 3.  We are unsure why there may have been a dip in detections in the third distance bin, but have resisted the urge to consider more highly parameterized structures since a smooth decrease in the number of animals encountered as a function of distance is often expected a priori \citep{BucklandEtAl2001}, and it would be difficult to fit this particular ``dip" in our distance data without making the detection model multimodal.  Our model did a reasonable job in replicating the proportions of animals with each detection history type observed in the field.  For instance, the number of `11', `10' and `01' histories compiled for moving animals was 289, 261, and 179, respectively; these compared to 95\% simulation intervals of (257,307), (227,276), and (173,219).  For stationary animals, we observed 64 `11', 92 `10' and 79 `01' histories compared to simulation intervals of (53,80), (74,103), and (68,95).
 
 
 \section{Simulation studies}
@@ -261,7 +309,7 @@ We conducted two simulation studies to investigate bias, precision, and confiden
 
 \subsection{Simulation study I: Basic model performance}
 
-Our first simulation study was designed to look at estimator performance over different movement and measurement error rates, and only considering variation imparted be measurable covariates.  For this study, we simulated  three different Gaussian movement kernel (Eqn. \ref{eq:g}) scenarios, corresponding to (i) no movement ($\phi_1 = \phi_2 = 0$), (ii) symmetric movement ($\phi_1 = \phi_2 = 0.7$), and (iii) asymmetric movement with much higher rates of movement away from the transect line than towards the transect line ($\phi_1 = 0.5, \phi_2 = 1.5$).  We considered two levels of measurement error for each movement scenario: no measurement error, or moderate measurement error ($\varphi = 0.5$).
+Our first simulation study was designed to investigate estimator performance over different movement and measurement error rates, and only considering variation imparted by measurable covariates.  For this study, we simulated  three different Gaussian movement kernel (Eqn. \ref{eq:g}) scenarios, corresponding to (i) no movement ($\phi_1 = \phi_2 = 0$), (ii) symmetric movement ($\phi_1 = \phi_2 = 0.7$), and (iii) asymmetric movement with much higher rates of movement away from the transect line than towards the transect line ($\phi_1 = 0.5, \phi_2 = 1.5$).  We considered two levels of measurement error for each movement scenario: no measurement error, or minor measurement error ($\varphi = 0.5$).  The latter value of measurement error was chosen to approximate the level of error we observed in our waterfowl data.
 
 In each of 500 simulations for the 6 movement and measurement error scenarios, we conducted the following steps:
 \begin{enumerate}
@@ -308,34 +356,21 @@ Simulations suggested that the MML model with observer dependence did a reasonab
 
 In this paper, we developed an approach to account for movement and measurement error in MRDS analyses when observers independently record distances to animals, and when there is a binary covariate for movement. In simulation studies, our approach exhibited low bias and RMSE when compared to a procedure that ignores movement and measurement error (the latter resulted in positive biases of up to 10\%).  Importantly, we were able to conduct estimation even in the face of residual detection heterogeneity, which seems like a useful advance. Indeed, estimation of abundance in our field study was much more sensitive to different functional forms for observer dependence than it was to different functional forms for movement or measurement error.
 
-Several avenues of future research are desirable.  First, our bootstrap-based estimates of variance resulted in confidence interval coverage that was less than nominal in some of the simulation scenarios.  A more robust method for producing confidence intervals for Horvitz-Thompson-like abundance estimates would be useful.  Second, although our focus here was on errors in distances, other errors may occur (e.g. errors in group size determinations, individual covariates, species, etc.).  Errors in species identification can be particularly problematic \citep[see e.g.][]{ConnEtAl2014} and should ultimately be addressed in multi-species surveys.  Third, we have assumed additive measurement error in the present development; in some situations, multiplicative measurement error \citep[whereby animals further away are subject to greater measurement error;][]{BorchersEtAl2010} may make more sense.  Finally, we have temporarily ignored the problem of expanding estimates from the surveyed area to some larger area of inference.  One approach to expanding the scope of inference would be to include a sample inclusion probability in the denominator of the Horvitz-Thompson estimator (i.e. Eqn. \ref{eq:ht}).  Another approach would be to produce sequences of estimates for different surveyed areas (presumably sharing detection and movement/measurement error parameters between areas), and to use such estimates as responses for subsequent spatial modeling efforts \citep[see e.g.][]{MillerEtAl2013}.
+Several avenues of future research are desirable.  First, our bootstrap-based estimates of variance resulted in confidence interval coverage that was less than nominal in some of the simulation scenarios.  A more robust method for producing confidence intervals for Horvitz-Thompson-like abundance estimates would be useful.  Second, although our focus here was on errors in distances, other errors may occur (e.g. errors in group size determinations, individual covariates, species, etc.).  Errors in species identification can be particularly problematic \citep[see e.g.][]{ConnEtAl2014} and should ultimately be addressed in multi-species surveys.  Third, we have assumed additive measurement error in the present development; in some situations, multiplicative measurement error \citep[whereby animals further away are subject to greater measurement error;][]{BorchersEtAl2010} may make more sense.  Finally, we have temporarily ignored the problem of expanding estimates from the surveyed area to some larger area of inference.  One approach to expanding the scope of inference would be to include a sample inclusion probability in the denominator of the Horvitz-Thompson estimator (i.e. Eqn. \ref{eq:ht}).  Another approach would be to produce sequences of estimates for different surveyed areas (presumably sharing detection and movement/measurement error parameters between areas), and to use such estimates as responses for subsequent spatial modelling efforts \citep[see e.g.][]{MillerEtAl2013}.
 
 In this paper we conditioned on binary variables $m_i$ for whether a detected group was moving or not. This approach let us separately estimate movement from measurement error by making the assumption that animals with $m_i=0$ do not move.  In other situations and study taxa (e.g. many marine mammals), all animals may be moving in some fashion, and thus there may be insufficient data to separate these processes.  In these circumstances, auxiliary data \citep[e.g. animals with known location to estimate measurement error; cf.][]{BorchersEtAl2010} may be needed to implement our methods.
 
-One exciting avenue for future research would be to expand our type of modeling approach to allow movement within spatial capture-recapture \citep[SCR; see e.g.][]{BorchersEfford2008,RoyleEtAl2013book} models.  The generalized likelihood structure of MRDS and SCR is actually very similar \citep{BorchersEtAl2015,BorchersMarques2017}, so incorporating movement could likely be accomplished using the same construct in the paper (i.e. by viewing an animals' locations as unobserved latent variables and integrating over all possible sequences of locations).  The challenge would likely be a numerical one, as space would need to be increased from one to two dimensions and over a finer mesh, and the temporal dimension would need to increase from two observers to a finite number of sampling occasions.  One approach to high dimensional integration would be to adopt a Bayesian perspective within a data augmentation framework \citep{RoyleEtAl2007b,ConnEtAl2012}.
+One exciting avenue for future research would be to expand our type of modelling approach to allow movement within spatial capture-recapture \citep[SCR; see e.g.][]{BorchersEfford2008,RoyleEtAl2013book} models.  The generalized likelihood structure of MRDS and SCR is actually very similar \citep{BorchersEtAl2015,BorchersMarques2017}, so incorporating movement could likely be accomplished using the same construct in the paper (i.e. by viewing an animals' locations as unobserved latent variables and integrating over all possible sequences of locations).  The challenge would likely be a numerical one, as space would need to be increased from one to two dimensions and over a finer mesh, and the temporal dimension would need to increase from two observers to a finite number of sampling occasions.  One approach to high dimensional integration would be to adopt a Bayesian perspective within a data augmentation framework \citep{RoyleEtAl2007b,ConnEtAl2012}.
 
+\section*{Acknowledgements}
+We thank Jeff Laake and Brett McClintock for comments on an earlier draft of this paper.
 
-\bibliographystyle{ECA_jasa}
+\bibliographystyle{imsart-nameyear}
 \bibliography{master_bib}
 
-\pagebreak
-TABLE CAPTIONS
 
-Table 1: Definitions of fixed and estimated quantities for the MRDS model incorporating movement and measurement error.
-
-\vspace{.3cm}
-
-Table 2: Estimated abundance of waterfowl surveyed in Arctic Canada.  The first 10 models account for movement and measurement error and are fitted via maximum marginal likelihood (MML), while the last two are Huggins-Alho models (HA) that ignore movement and measurement error.  MML models are ranked by AIC; we also provide the number of parameters in each model ($k$), log likelihood (LogL) at the MMLEs, the estimated number of waterfowl groups $\hat{G}$, and the estimated number of waterfowl ($\hat{N}$).  MML models varied by the functional form of movement and measurement error kernels (Gaussian vs. Laplace), the form of observer dependence (fi: full independence, pi: point independence; li: limiting independence),  as well as whether the detection function included a distance:moving interaction.  HA models varied by method used to reconcile distance measurements (HA1: prefer measurement of observer 1; HA2: mean distance). For HA models, only estimated bird groups are reported owing to software constraints. For reference, the number of detected bird groups was 964 and the total number of detected birds was 2666.
-
-\vspace{.3cm}
-
-Table 3: Mean proportion relative bias (RelBias), coefficient of variation (CV), 95\% confidence interval coverage (Cover), and root mean squared error (RMSE) for the two simulation studies. For the first simulation scenario, ``Configuration" gives values for movement ($\sigma_1$ and $\sigma_2$) and measurement error ($\varphi$) parameters, e.g. (0,0,0), respectively; in simulation study 2, it indicates these parameters as well as expected population size in the surveyed area $N=200$ or $N=1000$.  Three estimation models (Model) were fitted to each data set in simulation study 1: the maximum marginal likelihood (MML) model accounting for movement and measurement error, and two Huggins-Alho models which do not account for movement, measurement error, or observer dependence (HA1 and HA2; described in the text).  For simulation scenario two, we fitted an additional MML model that accounts for observer dependence (MMLd).
-
-
-
-\pagebreak
 \begin{table}[ht]
-\caption{
+\caption{Definitions of fixed and estimated quantities for the double-observer mark-recapture distance sampling (MRDS) model incorporating movement and measurement error.
 }
 \label{tab:notation}
 \raggedright
@@ -351,7 +386,7 @@ Table 3: Mean proportion relative bias (RelBias), coefficient of variation (CV),
   ${\bf x}_i$ & A vector of covariates used to explain variation in detection probability for group $i$ \\
   $g_i$ & Number of animals in group $i$ (a single determination is made) \\
   $\mathcal{S}$ & The set of distance bins for which data are recorded, $\mathcal{S}=\mathcal{S}_1,\mathcal{S}_2,\hdots,\mathcal{S}_{n_\mathcal{S}}$ \\
-  $\mathcal{Z}$ & The set of latent distance bins used for modeling true animal locations, $\mathcal{Z}=\mathcal{Z}_1,\mathcal{Z}_2,\hdots,\mathcal{Z}_{n_\mathcal{Z}}$
+  $\mathcal{Z}$ & The set of latent distance bins used for modelling true animal locations, $\mathcal{Z}=\mathcal{Z}_1,\mathcal{Z}_2,\hdots,\mathcal{Z}_{n_\mathcal{Z}}$
   \\
   $\pi_j$ & Proportion of $\mathcal{Z}$ covered by latent distance bin $j$ \\
   \multicolumn{2}{l}{\textbf{B. Parameters and functions of parameters}} \\
@@ -378,7 +413,7 @@ Table 3: Mean proportion relative bias (RelBias), coefficient of variation (CV),
 
 
 \begin{table}[ht]
-\caption{
+\caption{Estimated abundance of waterfowl surveyed in Arctic Canada.  The first 10 models account for movement and measurement error and are fitted via maximum marginal likelihood (MML), while the last two are Huggins-Alho models (HA) that ignore movement and measurement error.  MML models are ranked by AIC; we also provide the number of parameters in each model ($k$), log likelihood (LogL) at the MMLEs, the estimated number of waterfowl groups $\hat{G}$, and the estimated number of waterfowl ($\hat{N}$).  MML models varied by the functional form of movement and measurement error kernels (Gaussian vs. Laplace), the form of observer dependence (fi: full independence, pi: point independence; li: limiting independence),  as well as whether the detection function included a distance:moving interaction.  HA models varied by method used to reconcile distance measurements (HA1: prefer measurement of observer 1; HA2: mean distance). For HA models, only estimated bird groups are reported owing to software constraints. For reference, the number of detected bird groups was 964 and the total number of detected birds was 2666.  The `NA' values represent `not available,' either because models did not converge, because HA likelihood and AIC values were not comparable to MML values, or because of $\hat{N}$ values were unavailable from the software used to conduct estimation for the HA model.
 }
 \label{tab:ests}
 \raggedright
@@ -401,16 +436,13 @@ Table 3: Mean proportion relative bias (RelBias), coefficient of variation (CV),
   HA1 & NA & 10 & NA & 1239 (47) & NA \\
   HA2 & NA & 10 & NA & 1278 (56) & NA \\
 \hline
+$\dag$ Did not converge & & & & & \\
 \end{tabular}
-$\dag$ Did not converge
 \end{table}
-
-\pagebreak
-
 
 
 \begin{table}[ht]
-\caption{
+\caption{Mean proportion relative bias (RelBias), coefficient of variation (CV), 95\% confidence interval coverage (Cover), and root mean squared error (RMSE) for the two simulation studies. For the first simulation scenario, ``Configuration" gives values for movement ($\sigma_1$ and $\sigma_2$) and measurement error ($\varphi$) parameters, e.g. (0,0,0), respectively; in simulation study 2, it indicates these parameters as well as expected population size in the surveyed area $N=200$ or $N=1000$.  Three estimation models (Model) were fitted to each data set in simulation study 1: the maximum marginal likelihood (MML) model accounting for movement and measurement error, and two Huggins-Alho models which do not account for movement, measurement error, or observer dependence (HA1 and HA2; described in the text).  For simulation scenario two, we fitted an additional MML model that accounts for observer dependence (MMLd).
 }
 \label{tab:sims}
 \raggedright
@@ -486,7 +518,7 @@ $\dag$ Did not converge
 \begin{figure*}
 \begin{center}
 \includegraphics[width=150mm]{Dist_error_hists_JABES.pdf}
-\caption{Distribution of observed distance bin discrepancies ($d_{o=2} - d_{o=1}$) for bird groups detected by both front ($o=1$) and rear ($o=2$) observers in helicopter surveys. Negative values imply movement (or measurement error) towards the helicopter, while positive values imply movement away from the helicopter. For moving birds, the distance bin observed by the rear observer tended to be further away than the bin observed by the front observer.  Since the second observer always detected birds later than the front observer, this suggests responsive movement away from the aircraft. }
+\caption{Distribution of observed distance bin discrepancies ($d_{o=2} - d_{o=1}$) for bird groups detected by both front ($o=1$) and rear ($o=2$) observers in helicopter surveys. Negative values imply movement (or measurement error) towards the helicopter, while positive values imply movement away from the helicopter. For moving birds, the distance bin observed by the rear observer tended to be further away than the bin observed by the front observer.  Since the second observer always detected birds later than the front observer, this suggests that most movement was responsive away from the aircraft. For stationary birds, a nonzero distance bin discrepancy represents error in ascribing distance by either or both observers.}
 \label{fig:dist_hists}
 \end{center}
 \end{figure*}
@@ -505,7 +537,7 @@ $\dag$ Did not converge
 \begin{figure*}
 \begin{center}
 \includegraphics[width=150mm]{Kernel_plot.pdf}
-\caption{Estimated movement and measurement error kernels for waterfowl MRDS data from the highest ranked MML model. Measurement error used a (discretized) symmetric Laplace kernel, while movement had an asymmetric Laplace kernel.}
+\caption{Estimated movement and measurement error kernels for waterfowl mark-recapture distance sampling (MRDS) data from the highest ranked maximum marginal likelihood model. Measurement error used a (discretized) symmetric Laplace kernel, while movement had an asymmetric Laplace kernel.}
 \label{fig:kernel}
 \end{center}
 \end{figure*}
