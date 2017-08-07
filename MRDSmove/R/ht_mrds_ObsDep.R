@@ -20,17 +20,26 @@ expit<-function(x)(1/(1+exp(-x)))
 #'        a model for point independence sensu MacKenzie & Clement (2016)
 #' @param Bin.widths Vector of distance bin widths
 #' @param Obs.bins A vector giving which bins are observed (e.g. 1:3 if bins 1-3 are observed)
-#' @param Move.fix A indicator vector giving which movement/measurement error parameters to fix to 0 (omit if all are estimated)
+#' @param Move.fix A indicator vector giving which movement/measurement error parameters to fix to 0 
+#' @param Agg.var Column name for any aggregating variables; for instance, if Agg.var="species", separate estimates will be produced for each unique "species" value provided in Data (default is NULL)
 #' @param gaussian.move If TRUE, uses two half-normals for movement; if FALSE (default), uses exponential / half exponential (Laplace dist)
 #' @param gaussian.meas If TRUE, uses normal distribution for measurement error; if FALSE (default), uses double exponential (Laplace dist)
 #' @return a community mrds dataset
 #' @export
 #' @keywords simulation, mrds
 #' @author Paul B. Conn
-ht_mrds_ObsDep <- function(Par,Data,G,p.formula,dep.formula,Bin.widths,Obs.bins,Move.fix=Move.fix,gaussian.move=FALSE,gaussian.meas=FALSE){
+ht_mrds_ObsDep <- function(Par,Data,G,p.formula,dep.formula,Bin.widths,Obs.bins,Move.fix=Move.fix,Agg.var=NULL,gaussian.move=FALSE,gaussian.meas=FALSE){
+  if(is.null(Agg.var)){
+    Data$agg = "1"
+    Agg.var="agg"
+  }
+  if(!(Agg.var %in% colnames(Data)))cat("Error: Agg.var not a column of Data \n")
+  which.agg = which(colnames(Data)==Agg.var)
+  Agg = matrix(Data[,which.agg],nrow=2)[1,]
+  Unique.agg=unique(Agg)
   Cur.par = Par
   n.par = length(Par)
-  if(is.null(Move.fix)==FALSE | sum(Move.fix)>0){
+  if(sum(Move.fix)>0){
     n.est = 3-sum(Move.fix)
     Est.ind = c(rep(1,n.par-n.est),1-Move.fix)
     Which.est = which(Est.ind==1)
@@ -140,11 +149,18 @@ ht_mrds_ObsDep <- function(Par,Data,G,p.formula,dep.formula,Bin.widths,Obs.bins,
       P.dist[ibin1,ibin2,Which.01] = P.dist[ibin1,ibin2,Which.01]*(P.yes[ibin1,ibin2,2,Which.01]*P.yes[ibin1,ibin2,1,Which.01]*Meas[ibin2,Obs.dists[2,Which.01]]*(1-Pin[ibin1])+P.no[ibin1,ibin2,2,Which.01]*(1-P.yes[ibin1,ibin2,1,Which.01])*Meas[ibin2,Obs.dists[2,Which.01]])
     }
   }
-  N.hat = rep(0,n.hists)
+  N.hat.hist = P.tilde = rep(0,n.hists)
   for(ihist in 1:n.hists){
     P.dist[,,ihist]=P.dist[,,ihist]/sum(P.dist[,,ihist])
-    N.hat[ihist] = sum(G[ihist] * Count[ihist] * P.dist[c(1:n.obs.bins),,ihist] / P.dot[c(1:n.obs.bins),,ihist])
+    N.hat.hist[ihist] = sum(G[ihist] * Count[ihist] * P.dist[c(1:n.obs.bins),,ihist] / P.dot[c(1:n.obs.bins),,ihist])
+    P.tilde[ihist] = sum(P.dot[c(1:n.obs.bins),,ihist]*P.dist[c(1:n.obs.bins),,ihist])
   }
-  n.hat = sum(N.hat)
-  n.hat
+  Var.E = N.hat = rep(0,length(Unique.agg))
+  for(iagg in 1:length(Unique.agg)){
+    Cur.which = which(Agg==Unique.agg[iagg])
+    Var.E[iagg]=sum(Count[Cur.which]*(G[Cur.which]^2*(1-P.tilde[Cur.which])/P.tilde[Cur.which]^2))
+    N.hat[iagg]=sum(N.hat.hist[Cur.which])
+  }
+  names(N.hat)=Unique.agg
+  Out=list(n.hat=N.hat,var.E=Var.E)
 }

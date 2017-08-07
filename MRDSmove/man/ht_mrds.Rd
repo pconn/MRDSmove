@@ -3,10 +3,11 @@
 \name{ht_mrds}
 \alias{ht_mrds}
 \title{Calculate Horvitz-Thompson like estimator from detection, movement, and measurement error parameters by integrating
-over latent distance using Bayes rule.  Currently conditioning on animal being available to be detected (i.e. within Obs.bins) for the 1st observer}
+over latent distances.  Currently conditioning on animal being available to be detected (i.e. within Obs.bins) for the 1st observer.
+This function also returns a variance component for Var(E(N-hat|Data)) a la Huggins-Alho}
 \usage{
 ht_mrds(Par, Data, G, mod.formula, Bin.widths, Obs.bins, Move.fix = Move.fix,
-  gaussian.move = FALSE, gaussian.meas = FALSE)
+  Agg.var = NULL, gaussian.move = FALSE, gaussian.meas = FALSE)
 }
 \arguments{
 \item{Par}{Parameter vector, including detection parameters, movement error SDs (left and right tail), measurement error SD}
@@ -28,7 +29,9 @@ interaction between "other" and "distance" can be used to implement point indend
 
 \item{Obs.bins}{A vector giving which bins are observed (e.g. 1:3 if bins 1-3 are observed)}
 
-\item{Move.fix}{A indicator vector giving which movement/measurement error parameters to fix to 0 (omit if all are estimated)}
+\item{Move.fix}{A indicator vector giving which movement/measurement error parameters to fix to 0}
+
+\item{Agg.var}{Column name for any aggregating variables; for instance, if Agg.var="species", separate estimates will be produced for each unique "species" value provided in Data (default is NULL)}
 
 \item{gaussian.move}{If TRUE, uses two half-normals for movement; if FALSE (default), uses exponential / half exponential (Laplace dist)}
 
@@ -39,7 +42,8 @@ a community mrds dataset
 }
 \description{
 Calculate Horvitz-Thompson like estimator from detection, movement, and measurement error parameters by integrating
-over latent distance using Bayes rule.  Currently conditioning on animal being available to be detected (i.e. within Obs.bins) for the 1st observer
+over latent distances.  Currently conditioning on animal being available to be detected (i.e. within Obs.bins) for the 1st observer.
+This function also returns a variance component for Var(E(N-hat|Data)) a la Huggins-Alho
 }
 \author{
 Paul B. Conn

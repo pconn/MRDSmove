@@ -101,12 +101,15 @@ MRDSmove_IntLik_ObsDep <- function(Par,Data,p.formula,dep.formula,Bin.widths,Obs
       X = model.matrix(p.formula,Data)
       X.dep = model.matrix(dep.formula,Data)
       P[ibin1,ibin2,,]=expit(X%*%Par[Which.beta.p]+X.dep%*%Par[Which.beta.dep])   #conditional on detect/not detect in data
+      P[ibin1,ibin2,,][P[ibin1,ibin2,,]<0.0000001]=0.0000001
       Data$det_other = 0
       X.dep = model.matrix(dep.formula,Data)
       P.no[ibin1,ibin2,,]=expit(X%*%Par[Which.beta.p]+X.dep%*%Par[Which.beta.dep])  #other observer does not detect
+      P.no[ibin1,ibin2,,][P.no[ibin1,ibin2,,]<0.0000001]=0.0000001
       Data$det_other = 1
       X.dep = model.matrix(dep.formula,Data)
       P.yes[ibin1,ibin2,,]=expit(X%*%Par[Which.beta.p]+X.dep%*%Par[Which.beta.dep]) #other observer detects
+      P.yes[ibin1,ibin2,,][P.yes[ibin1,ibin2,,]<0.0000001]=0.0000001
       Data$det_other=Det_other
       P.dot[ibin1,ibin2,]=Pin[ibin1]*Pin[ibin2]*P.yes[ibin1,ibin2,1,]*P.yes[ibin1,ibin2,2,]+
                              P.yes[ibin1,ibin2,1,]*P.yes[ibin1,ibin2,2,]*Pin[ibin1]*(1-Pin[ibin2])+
@@ -139,7 +142,8 @@ MRDSmove_IntLik_ObsDep <- function(Par,Data,p.formula,dep.formula,Bin.widths,Obs
       P.hist[Which.01] = P.hist[Which.01]+P.dist[ibin1,ibin2,Which.01]*(P.yes[ibin1,ibin2,2,Which.01]*P.yes[ibin1,ibin2,1,Which.01]*Meas[ibin2,Obs.dists[2,Which.01]]*(1-Pin[ibin1])+P.no[ibin1,ibin2,2,Which.01]*(1-P.yes[ibin1,ibin2,1,Which.01])*Meas[ibin2,Obs.dists[2,Which.01]])/P.dot[ibin1,ibin2,Which.01]
     }
   }
-  
   log.lik = sum(Count * log(P.hist)) 
+  #cat(Par,'\n')
+  #cat(paste(log.lik,'\n'))    
   -log.lik
 }

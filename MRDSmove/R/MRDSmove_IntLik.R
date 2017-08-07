@@ -92,6 +92,7 @@ MRDSmove_IntLik <- function(Par,Data,mod.formula,Bin.widths,Obs.bins,Move.fix=NU
       Data$distance2 = Data$distance^2
       X = model.matrix(mod.formula,Data)
       P[ibin1,ibin2,,]=expit(X%*%Par[1:ncol(X)])
+      P[ibin1,ibin2,,][P[ibin1,ibin2,,]<0.0000001]=0.0000001
       P.dist[ibin1,ibin2,Which.move] = Bin.probs[ibin1]*Psi[ibin1,ibin2]
       P.dist[ibin1,ibin2,-Which.move] = Bin.probs[ibin1]*Psi.nomove[ibin1,ibin2]
       P.dist[ibin1,ibin2,]=P.dist[ibin1,ibin2,]*(1-(1-Pin[ibin1]*P[ibin1,ibin2,1,])*(1-Pin[ibin2]*P[ibin1,ibin2,2,]))
@@ -113,7 +114,6 @@ MRDSmove_IntLik <- function(Par,Data,mod.formula,Bin.widths,Obs.bins,Move.fix=NU
       P.hist[Which.01] = P.hist[Which.01]+P.dist[ibin1,ibin2,Which.01]*P[ibin1,ibin2,2,Which.01]*(1-P[ibin1,ibin2,1,Which.01]*sum(Meas[ibin1,Obs.bins]))*Meas[ibin2,Obs.dists[2,Which.01]]/P.dot[Which.01]
     }
   }
-  
   log.lik = sum(Count * log(P.hist)) 
   -log.lik
 }

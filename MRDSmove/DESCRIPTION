@@ -1,11 +1,11 @@
 Package: MRDSmove 
 Type: Package 
 Title: Analysis of binned MRDS data subject to movement and measurement error 
-Version: 0.1 
-Date: 2017-03-15 
+Version: 0.2 
+Date: 2017-08-07 
 Author: Paul B. Conn 
 Maintainer: Paul Conn <paul.conn@noaa.gov> 
 Description: Code to estimate animal abundance from transect counts where two observers detect animals independently, and where there are discrepancies between distance bins attributable to movement (animals moving between the time observer 1 sees them and observer 2 sees them) and measurement error.  Detection probabilities are allowed to vary by individual covariates, and additional heterogeneity can be handled via observer dependence parameters (as in MacKenzie and Clement 2016).  Separate functions exist to estimate detection, movement, and measurement error via marginal likelihood, and to estimate abundance via a Horwitz-Thompson-like procedure (with a bootstrap-based variance estimate).  
-License: GNU General Public License v3 
+License: GNU General Public License version 3 
 LazyData: TRUE 
 RoxygenNote: 6.0.1

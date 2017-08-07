@@ -7,7 +7,8 @@ over latent distance using Bayes rule.  Currently conditioning on animal being a
 This version allows observer dependence (e.g. point or limiting independence) through dep.formula.}
 \usage{
 ht_mrds_ObsDep(Par, Data, G, p.formula, dep.formula, Bin.widths, Obs.bins,
-  Move.fix = Move.fix, gaussian.move = FALSE, gaussian.meas = FALSE)
+  Move.fix = Move.fix, Agg.var = NULL, gaussian.move = FALSE,
+  gaussian.meas = FALSE)
 }
 \arguments{
 \item{Par}{Parameter vector, including detection parameters, movement error SDs (left and right tail), measurement error SD}
@@ -30,7 +31,9 @@ a model for point independence sensu MacKenzie & Clement (2016)}
 
 \item{Obs.bins}{A vector giving which bins are observed (e.g. 1:3 if bins 1-3 are observed)}
 
-\item{Move.fix}{A indicator vector giving which movement/measurement error parameters to fix to 0 (omit if all are estimated)}
+\item{Move.fix}{A indicator vector giving which movement/measurement error parameters to fix to 0}
+
+\item{Agg.var}{Column name for any aggregating variables; for instance, if Agg.var="species", separate estimates will be produced for each unique "species" value provided in Data (default is NULL)}
 
 \item{gaussian.move}{If TRUE, uses two half-normals for movement; if FALSE (default), uses exponential / half exponential (Laplace dist)}
 

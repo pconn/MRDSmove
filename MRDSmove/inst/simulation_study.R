@@ -3,19 +3,24 @@
 library('MRDSmove')
 library('RMark')
 library('mvtnorm')
+#source('c:/users/paul.conn/git/Alisauskas/MRDSmove/R/ht_mrds.R')
+#source('c:/users/paul.conn/git/Alisauskas/MRDSmove/R/ht_mrds_ObsDep.R')
+#source('c:/users/paul.conn/git/Alisauskas/MRDSmove/R/MRDSmove_IntLik.R')
+#source('c:/users/paul.conn/git/Alisauskas/MRDSmove/R/MRDSmove_IntLik_ObsDep.R')
+
+#setwd('d:/git/alisauskas')
 n.obs.bins=5
 
 expit<-function(x)1/(1+exp(-x))
 n.sims = 500
-n.bootstraps = 1000
-#set.seed(12345)  for sims 1-100
-set.seed(22345)
+
+set.seed(12345)  #M=1:3 simulations conducted with same seed as M=4:6 simulations
 
 start.time = Sys.time()
 
-M.pars = matrix(0.0001,6,3)
-M.pars[2,] = c(.7,.7,0.0001)
-M.pars[3,] = c(0.5,1.5,0.0001)
+M.pars = matrix(0.00001,6,3)
+M.pars[2,] = c(.7,.7,0.00001)
+M.pars[3,] = c(0.5,1.5,0.00001)
 M.pars[4,3] = 0.5
 M.pars[5,] = c(.7,.7,0.5)
 M.pars[6,] = c(0.5,1.5,0.5)
@@ -25,9 +30,11 @@ N.est= SE = Cov = array(0,dim=c(n.sims,6,3))  # 6 M options * 2 dependence optio
 N.true = matrix(0,n.sims,6)
 my.formula=~distance+distance2+observer+g_size+moving
 
+SMALL = 0.0000001 #for gradient calculation
+
 for(isim in 1:n.sims){
   cat(paste("\n simulation ",isim,"\n"))
-  for(iM in 1:6){
+  for(iM in 4:6){
     for(idep in 0:0){
       Sim_data <- simulate_mrds(n_species=1,n_bins=10,n_obs_bins=5,measure_par=M.pars[iM,3],move_par=M.pars[iM,1:2],gaussian=TRUE,point_indep=idep)
       Obs_data=data.frame(Sim_data$Obs_data)
@@ -36,11 +43,7 @@ for(isim in 1:n.sims){
         Sim_data <- simulate_mrds(n_species=1,n_bins=15,n_obs_bins=5,measure_par=M.pars[iM,3],move_par=M.pars[iM,1:2],gaussian=TRUE,point_indep=idep)
         Obs_data=data.frame(Sim_data$Obs_data)
       }
-      #n.hists=nrow(Obs_data)
-      #Data = data.frame(match=rep(c(1:n.hists),each=2),observer=rep(c(0,1),n.hists),species=rep(Obs_data$species,each=2),
-      #                  obs.dist=as.vector(rbind(Obs_data$d1_obs,Obs_data$d2_obs)),g_size=rep(Obs_data$g_size,each=2),
-      #                  moving = rep(Obs_data$fly,each=2),detected=as.vector(rbind(Obs_data$det1,Obs_data$det2)))
-      
+
       Char_hist = factor(apply(cbind(Obs_data$d1_obs,Obs_data$d2_obs,Obs_data$det1,Obs_data$det2,Obs_data$fly),1,'paste',collapse=''))
       Counts = tabulate(Char_hist)
       Duplicated = duplicated(Char_hist)
@@ -55,7 +58,7 @@ for(isim in 1:n.sims){
       Data$count = rep(Counts[Order],each=2)
       
       N.true[isim,iM] = sum(Sim_data$Complete_data[,"d1_true"]%in%Obs.bins)
-      Which.fix = which(M.pars[iM,] == 0.0001 | M.pars[iM,] == 20)
+      Which.fix = which(M.pars[iM,] == 0.00001 | M.pars[iM,] == 20)
       my.par = c(1,.07,-.09,.5)
       Move.fix = rep(0,3)
       if(length(Which.fix)==0)my.par = c(my.par,log(M.pars[iM,]))
@@ -68,21 +71,33 @@ for(isim in 1:n.sims){
       glm_out = optim(par=my.par,MRDSmove_IntLik,hessian=TRUE,method="BFGS",Data=Data,mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=c(1:n.obs.bins),Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
       glm_out$par
       Sigma = try(solve(glm_out$hessian),TRUE)
-      #sqrt(diag(solve(glm_out$hessian)))   
+      
+      Grad=rep(0,length(my.par))
+      
       #ht estimate and SE
       if(class(Sigma)!="matrix")N.est[isim,iM,1]=SE[isim,iM,1]=Cov[isim,iM,1]=NA
       else{
         if(sum(diag(Sigma))<0 | max(diag(Sigma))>10)N.est[isim,iM,1]=SE[isim,iM,1]=Cov[isim,iM,1]=NA
         else{
-          g_est = ht_mrds(Par=glm_out$par,Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
-          Par.boot = rmvnorm(n.bootstraps,glm_out$par,sigma=Sigma)
-          N_boot = rep(0,n.bootstraps)
-          for(iboot in 1:n.bootstraps){
-            N_boot[iboot]=ht_mrds(Par=Par.boot[iboot,],Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
+          HT = ht_mrds(Par=glm_out$par,Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)
+          g_est = HT$n.hat
+          for(ipar in 1:length(my.par)){
+            Temp.par=glm_out$par
+            Temp.par[ipar]=Temp.par[ipar]+SMALL
+            new_g = ht_mrds(Par=Temp.par,Data=Data,G=rep(1,n.hists),mod.formula=my.formula,Bin.widths=rep(1,8),Obs.bins=Obs.bins,Move.fix=Move.fix,gaussian.move=TRUE,gaussian.meas=TRUE)$n.hat
+            Grad[ipar]=(new_g-g_est)/SMALL
           }
+          E.Var = crossprod(Grad,solve(glm_out$hessian,Grad))
+          
           N.est[isim,iM,1]=g_est
-          SE[isim,iM,1] = sqrt(var(N_boot))
-          Cov[isim,iM,1] = ((N.true[isim,iM] > quantile(N_boot,0.025)) & (N.true[isim,iM]<= quantile(N_boot,0.975)))
+          
+          Var.E = HT$var.E
+          Var = E.Var+Var.E
+          SE[isim,iM,1] = sqrt(Var)
+          C = exp(1.96*sqrt(log(1+Var/N.est[isim,iM,1]^2)))
+          CI.low = N.est[isim,iM,1]/C  #log-based CI for N (see e.g. Buckland et al. Distance sampling book, pg 88)
+          CI.hi = N.est[isim,iM,1]*C
+          Cov[isim,iM,1] = ((N.true[isim,iM] > CI.low) & (N.true[isim,iM]<= CI.hi))
         }
       }
       
@@ -145,7 +160,7 @@ for(isim in 1:n.sims){
   } 
   if(isim%%50==0){
     Out = list(N.true=N.true,N.est=N.est,SE=SE,Cov=Cov)
-    save(Out,file="SimResults.Rdata")
+    save(Out,file="SimResults_revision_M4to6.Rdata")
   }
 }
 
